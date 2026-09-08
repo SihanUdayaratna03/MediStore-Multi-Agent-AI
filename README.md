@@ -1,7 +1,7 @@
 <div align="center">
 
  
-# 🩺 MediStore AI 
+ #🩺 MediStore AI 
 
 
 
@@ -499,7 +499,7 @@ All trained `.pkl` artifacts and feature definitions are saved directly to `mode
 
 <div align="center">
 
-=======
+
   <sub> MediStore AI Engineering </sub>
 
 </div>
