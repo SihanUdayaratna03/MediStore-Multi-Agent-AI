@@ -20,15 +20,16 @@
  */
 
 import { useState, useCallback } from 'react'
-import { ArrowLeft, FileText, Sparkles } from 'lucide-react'
+import { FileCheck2, Sparkles } from 'lucide-react'
 import DocUpload from '../components/DocUpload/DocUpload'
 import DocViewer from '../components/DocViewer/DocViewer'
 import DocChat   from '../components/DocChat/DocChat'
 import Reveal    from '../components/ui/Reveal'
+import TopBar    from '../components/ui/TopBar'
 import { uploadDocument } from '../api/docApi'
 import './DocIntelligence.css'
 
-export default function DocIntelligence({ onBack }) {
+export default function DocIntelligence({ onBack, onNavigate }) {
   const [uploadState, setUploadState] = useState('idle')  // 'idle' | 'uploading' | 'ready' | 'error'
   const [sessionData, setSessionData] = useState(null)    // UploadResponse from backend
   const [uploadError, setUploadError] = useState(null)
@@ -68,36 +69,23 @@ export default function DocIntelligence({ onBack }) {
 
   return (
     <div className="doc-intel-screen">
-      {/* ── Top Bar ─────────────────────────────────────────────────────── */}
-      <header className="doc-intel-topbar">
-        <button
-          className="doc-intel-back-btn"
-          onClick={onBack}
-          aria-label="Go back"
-        >
-          <ArrowLeft size={16} aria-hidden="true" />
-          Back
-        </button>
+      <TopBar
+        moduleName="Document Intelligence"
+        accent="sky"
+        activeModule="doc-intelligence"
+        onNavigate={onNavigate}
+        onBack={onBack}
+        status={uploadState === 'ready' ? 'Document indexed' : 'Secure analysis workspace'}
+      />
 
-        <div className="doc-intel-title-group">
-          <div className="doc-intel-title-icon">
-            <FileText size={18} aria-hidden="true" />
-          </div>
-          <div>
-            <h1 className="doc-intel-title">Document Intelligence</h1>
-            <span className="doc-intel-subtitle">
-              Upload · Analyse · Ask — Powered by Gemini
-            </span>
-          </div>
-        </div>
-
-        {uploadState === 'ready' && (
-          <div className="doc-intel-session-badge">
-            <Sparkles size={13} aria-hidden="true" />
-            {sessionData?.filename}
-          </div>
-        )}
-      </header>
+      <div className="doc-intel-context" role="status" aria-live="polite">
+        <span className="doc-intel-context__icon"><FileCheck2 size={17} aria-hidden="true" /></span>
+        <span>
+          <strong>{uploadState === 'ready' ? sessionData?.filename : 'Clinical document workspace'}</strong>
+          <small>{uploadState === 'ready' ? 'Ready for evidence-linked questions' : 'Upload a PDF or medical image to begin'}</small>
+        </span>
+        <span className="doc-intel-context__badge"><Sparkles size={13} aria-hidden="true" /> Source-grounded answers</span>
+      </div>
 
       {/* ── Main layout ─────────────────────────────────────────────────── */}
       <main className="doc-intel-main" id="main">

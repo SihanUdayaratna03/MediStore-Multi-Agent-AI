@@ -62,7 +62,7 @@ export function useDocChatService(sessionId) {
         ...prev,
         {
           role:    'assistant',
-          content: `⚠️ ${errText}`,
+          content: `Error: ${errText}`,
           isError: true,
           id:      Date.now() + 1,
         },

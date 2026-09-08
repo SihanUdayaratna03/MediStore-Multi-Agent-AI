@@ -6,6 +6,7 @@
  * and a text snippet from the document.
  */
 
+import { FileText } from 'lucide-react'
 import './CitationPanel.css'
 
 export default function CitationPanel({ citations }) {
@@ -13,7 +14,7 @@ export default function CitationPanel({ citations }) {
 
   return (
     <div className="citation-panel">
-      <p className="citation-panel-label">📄 Sources from your document:</p>
+      <p className="citation-panel-label"><FileText size={15} aria-hidden="true" /> Sources from your document:</p>
       <div className="citation-panel-list">
         {citations.map((c, i) => (
           <div key={c.chunk_id || i} className="citation-card">

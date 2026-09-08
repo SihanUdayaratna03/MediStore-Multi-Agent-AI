@@ -1,33 +1,33 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    MediStore AI — Design Tokens
    The single source of truth for colour, depth, motion and spacing.
-   Brand palette is unchanged: midnight navy ground, sky-blue (v2) and
-   violet (v3) module accents. Everything below is derived from those.
+   Forest-lake palette: deep evergreen ground, lake aqua (v2) and warm
+   dawn-gold (v3) accents. Everything below is derived from those.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* ── Ground ──────────────────────────────────────────────────────────── */
-  --bg-dark: #020617;
-  --bg-deep: #01030d;
-  --surface-chart: #0d1526;      /* the surface charts are validated against */
+  --bg-dark: #061512;
+  --bg-deep: #03100e;
+  --surface-chart: #0b211d;      /* the surface charts are validated against */
 
-  /* ── Brand accents (unchanged) ───────────────────────────────────────── */
-  --accent: #38bdf8;             /* sky — legacy alias, kept for compatibility */
-  --sky-100: #e0f2fe;
-  --sky-300: #7dd3fc;
-  --sky-400: #38bdf8;
-  --sky-500: #0ea5e9;
-  --sky-600: #0284c7;
-  --sky-700: #0369a1;
+  /* ── Brand accents ───────────────────────────────────────────────────── */
+  --accent: #78d4c3;             /* lake aqua — legacy alias, kept for compatibility */
+  --sky-100: #e4faf5;
+  --sky-300: #9ce3d6;
+  --sky-400: #78d4c3;
+  --sky-500: #4ab9a5;
+  --sky-600: #278f7f;
+  --sky-700: #1b6d62;
 
-  --violet-200: #ddd6fe;
-  --violet-300: #c4b5fd;
-  --violet-400: #a78bfa;
-  --violet-500: #8b5cf6;
-  --violet-600: #7c3aed;
-  --violet-700: #6d28d9;
+  --violet-200: #f0e8cf;
+  --violet-300: #dfd09f;
+  --violet-400: #c9b36f;
+  --violet-500: #a98f4d;
+  --violet-600: #876d35;
+  --violet-700: #675127;
 
   /* ── Status palette ──────────────────────────────────────────────────────
      Validated against --surface-chart. These are RESERVED for clinical state
@@ -57,15 +57,15 @@
      On a near-black ground, glass has to sit *above* the backdrop in
      lightness or it reads as a hole rather than a floating pane. Each tier is
      a lifted slate, and recessed elements go darker than the ground.        */
-  --panel-bg: rgba(30, 41, 59, 0.62);
-  --glass-1: rgba(38, 50, 71, 0.6);    /* floating, nearest the viewer */
-  --glass-2: rgba(30, 41, 59, 0.62);   /* default panel */
-  --glass-3: rgba(14, 22, 40, 0.82);   /* recessed / sidebar */
-  --glass-inset: rgba(2, 6, 23, 0.5);  /* wells cut into a panel */
+  --panel-bg: rgba(18, 43, 38, 0.68);
+  --glass-1: rgba(29, 59, 53, 0.66);   /* floating, nearest the viewer */
+  --glass-2: rgba(18, 43, 38, 0.7);    /* default panel */
+  --glass-3: rgba(8, 29, 25, 0.88);    /* recessed / sidebar */
+  --glass-inset: rgba(3, 18, 15, 0.62);/* wells cut into a panel */
 
-  --panel-border: rgba(148, 163, 184, 0.26);
-  --border-soft: rgba(148, 163, 184, 0.16);
-  --border-strong: rgba(148, 163, 184, 0.36);
+  --panel-border: rgba(170, 211, 201, 0.24);
+  --border-soft: rgba(170, 211, 201, 0.14);
+  --border-strong: rgba(170, 211, 201, 0.34);
 
   /* Specular top edge that sells the "lit glass" look */
   --edge-light: rgba(255, 255, 255, 0.14);
@@ -100,8 +100,9 @@
   --sp-7: 3rem;
 
   /* ── Type ────────────────────────────────────────────────────────────── */
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-display: 'Manrope', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-editorial: 'Instrument Serif', Georgia, serif;
 
   /* ── Motion ──────────────────────────────────────────────────────────── */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

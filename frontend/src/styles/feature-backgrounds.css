@@ -1,0 +1,495 @@
+/* Shared light clinical canvas for the four product workspaces. This file is
+   loaded last so legacy forest-green shells cannot leak back into a module. */
+.app-container,
+.doc-intel-screen,
+.ms-care-locator-page {
+  --text-main: #153f39;
+  --text-muted: #607a75;
+  --text-dim: #78908b;
+  --text-faint: rgba(59, 91, 84, 0.58);
+  --panel-bg: rgba(255, 255, 255, 0.82);
+  --glass-1: rgba(255, 255, 255, 0.92);
+  --glass-2: rgba(255, 255, 255, 0.82);
+  --glass-3: rgba(255, 255, 255, 0.9);
+  --glass-inset: rgba(246, 251, 249, 0.96);
+  --panel-border: rgba(82, 145, 133, 0.22);
+  --border-soft: rgba(63, 126, 114, 0.14);
+  --border-strong: rgba(63, 126, 114, 0.26);
+  --edge-light: rgba(255, 255, 255, 0.9);
+  --sky-300: #168faf;
+  --sky-400: #168fbd;
+  --sky-500: #138fa4;
+  --sky-600: #0f8f7b;
+  --sky-700: #087261;
+  --violet-300: #8a62d3;
+  --violet-400: #7d58c4;
+  --violet-500: #7652b8;
+  --violet-600: #6845aa;
+  --violet-700: #583991;
+  --shadow-1: 0 2px 10px rgba(25, 90, 79, 0.06);
+  --shadow-2: 0 18px 45px rgba(25, 90, 79, 0.1);
+  --shadow-3: 0 24px 60px rgba(25, 90, 79, 0.12);
+  isolation: isolate;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 91% 10%, rgba(71, 177, 218, 0.18), transparent 25rem),
+    radial-gradient(circle at 77% 24%, rgba(68, 198, 164, 0.18), transparent 30rem),
+    radial-gradient(circle at 6% 37%, rgba(78, 158, 219, 0.1), transparent 24rem),
+    #f4fbf8 !important;
+}
+
+.app-container::before,
+.doc-intel-screen::before,
+.ms-care-locator-page::before {
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(rgba(15, 143, 123, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 143, 123, 0.045) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: linear-gradient(90deg, #000 0%, transparent 62%, #000 100%);
+}
+
+.app-container > *,
+.doc-intel-screen > *,
+.ms-care-locator-page > * { position: relative; z-index: 1; }
+
+/* Shared product navigation */
+.app-container .ms-topbar,
+.doc-intel-screen .ms-topbar,
+.ms-care-locator-page .ms-topbar {
+  color: var(--text-main);
+  border-bottom: 1px solid rgba(92, 150, 139, 0.22);
+  background: rgba(255, 255, 255, 0.84) !important;
+  box-shadow: 0 12px 36px rgba(29, 91, 80, 0.08);
+  backdrop-filter: blur(20px) saturate(130%);
+}
+
+.app-container .ms-brand__product,
+.doc-intel-screen .ms-brand__product,
+.ms-care-locator-page .ms-brand__product { color: #153f39; }
+
+.app-container .ms-brand__mark,
+.doc-intel-screen .ms-brand__mark,
+.ms-care-locator-page .ms-brand__mark {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(145deg, #18a6c9, #0b8b78);
+  box-shadow: 0 9px 24px rgba(13, 136, 122, 0.2), inset 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.app-container .ms-workspace-nav,
+.doc-intel-screen .ms-workspace-nav,
+.ms-care-locator-page .ms-workspace-nav {
+  border-color: rgba(71, 132, 120, 0.14);
+  background: rgba(241, 249, 246, 0.82);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.85);
+}
+
+.app-container .ms-workspace-nav__item,
+.doc-intel-screen .ms-workspace-nav__item,
+.ms-care-locator-page .ms-workspace-nav__item { color: #5d7a74; }
+
+.app-container .ms-workspace-nav__item:hover,
+.doc-intel-screen .ms-workspace-nav__item:hover,
+.ms-care-locator-page .ms-workspace-nav__item:hover { color: #087261; background: #e9f7f3; }
+
+.app-container .ms-workspace-nav__item[data-active='true'],
+.doc-intel-screen .ms-workspace-nav__item[data-active='true'],
+.ms-care-locator-page .ms-workspace-nav__item[data-active='true'] {
+  color: #087261;
+  border-color: rgba(15, 143, 123, 0.24);
+  background: linear-gradient(180deg, #edf9f6, #e1f4ef);
+  box-shadow: 0 6px 16px rgba(20, 112, 96, 0.08), inset 0 1px #fff;
+}
+
+.app-container .ms-system-status,
+.doc-intel-screen .ms-system-status,
+.ms-care-locator-page .ms-system-status { color: #607a75; }
+
+.app-container .ms-secure-session,
+.doc-intel-screen .ms-secure-session,
+.ms-care-locator-page .ms-secure-session {
+  color: #0f8f7b;
+  border-color: rgba(15, 143, 123, 0.2);
+  background: #edf9f6;
+}
+
+.app-container .ms-btn--workspace,
+.doc-intel-screen .ms-btn--workspace,
+.ms-care-locator-page .ms-btn--workspace {
+  color: #315d55;
+  border-color: rgba(58, 121, 109, 0.2);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+/* Predictor workspaces */
+.app-container .sidebar {
+  color: var(--text-main);
+  border-right: 1px solid rgba(91, 151, 140, 0.22);
+  background: rgba(255, 255, 255, 0.86) !important;
+  box-shadow: 16px 0 44px rgba(26, 89, 78, 0.08);
+  backdrop-filter: blur(22px) saturate(120%);
+}
+
+.app-container .sidebar::after {
+  background: linear-gradient(180deg, transparent, rgba(15, 143, 123, 0.34), rgba(22, 143, 189, 0.22), transparent);
+}
+
+.app-container .form-section-title { color: #0f8f7b; border-bottom-color: rgba(62, 126, 114, 0.14); }
+.app-container .form-section-title--violet { color: #7652b8; }
+.app-container .input-label { color: #4f6f69; }
+.app-container .input-label > span,
+.app-container .input-label .ms-value { color: #087261; background: #e8f7f3; border-color: rgba(15, 143, 123, 0.18); }
+.app-container .ms-form--violet .input-label > span,
+.app-container .ms-form--violet .input-label .ms-value { color: #6845aa; background: #f2edfb; border-color: rgba(118, 82, 184, 0.2); }
+
+.app-container .input-field:not(.range) {
+  color: #153f39;
+  border-color: rgba(64, 127, 115, 0.23);
+  background-color: rgba(250, 253, 252, 0.96) !important;
+  box-shadow: inset 0 1px #fff;
+}
+
+.app-container .input-field:hover:not(:focus) { border-color: rgba(15, 143, 123, 0.4); }
+.app-container .input-field:focus:not(.range) { border-color: #0f8f7b; background-color: #fff !important; box-shadow: 0 0 0 4px rgba(15, 143, 123, 0.1); }
+.app-container .input-field option { color: #153f39; background: #fff; }
+.app-container .input-field.range::-webkit-slider-runnable-track { border-color: rgba(15, 143, 123, 0.14); background-color: #dceae6; }
+.app-container .input-field.range::-moz-range-track { border-color: rgba(15, 143, 123, 0.14); background: #dceae6; }
+
+.app-container .ms-x-workspace-intro {
+  border-color: rgba(85, 146, 135, 0.22);
+  background: rgba(255, 255, 255, 0.74) !important;
+  box-shadow: 0 16px 40px rgba(26, 89, 78, 0.08), inset 0 1px #fff;
+  backdrop-filter: blur(18px);
+}
+
+.app-container .ms-x-workspace-intro h1 { color: #153f39; }
+.app-container .ms-x-workspace-intro p { color: #607a75; }
+.app-container .ms-x-workspace-intro__copy > span { color: #0f8f7b; }
+.app-container .ms-x-workspace-intro__metrics > span { border-color: rgba(64, 128, 116, 0.14); background: #f2f9f7; }
+.app-container .ms-x-workspace-intro__metrics strong { color: #244e47; }
+.app-container .ms-x-workspace-intro__metrics small,
+.app-container .ms-x-workspace-intro__trust { color: #6b857f; }
+
+.app-container .glass-panel {
+  color: var(--text-main);
+  border-color: rgba(82, 145, 133, 0.2);
+  background: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 18px 45px rgba(25, 90, 79, 0.09), inset 0 1px #fff;
+  backdrop-filter: blur(18px);
+}
+
+.app-container .glass-panel:hover { border-color: rgba(15, 143, 123, 0.32); box-shadow: 0 22px 52px rgba(25, 90, 79, 0.12); }
+.app-container .ms-empty::after { opacity: 0.55; background-image: linear-gradient(rgba(15, 143, 123, 0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(15, 143, 123, 0.045) 1px, transparent 1px); }
+.app-container .ms-empty__title { color: #153f39; }
+.app-container .ms-empty__body { color: #607a75; }
+.app-container .ms-stat { color: #153f39; border-color: rgba(64, 128, 116, 0.14); background: #f3f9f7; }
+.app-container .ms-stat__label { color: #6c857f; }
+.app-container .factor-item,
+.app-container .ms-rec,
+.app-container .ms-disclaimer { border-color: rgba(64, 128, 116, 0.14); background: rgba(245, 251, 249, 0.92); }
+
+/* Document Intelligence */
+.doc-intel-screen .doc-intel-context {
+  color: var(--text-main);
+  border-color: rgba(82, 145, 133, 0.22);
+  background: rgba(255, 255, 255, 0.76) !important;
+  box-shadow: 0 14px 36px rgba(25, 90, 79, 0.08), inset 0 1px #fff;
+  backdrop-filter: blur(18px);
+}
+
+.doc-intel-screen .doc-intel-context strong { color: #153f39; }
+.doc-intel-screen .doc-intel-context small { color: #607a75; }
+.doc-intel-screen .doc-intel-context__icon,
+.doc-intel-screen .doc-intel-context__badge { color: #0f8f7b; border-color: rgba(15, 143, 123, 0.18); background: #e8f7f3; }
+
+.doc-intel-screen .doc-upload-wrapper,
+.doc-intel-screen .doc-chat-wrapper,
+.doc-intel-screen .doc-viewer-wrapper,
+.doc-intel-screen .doc-intel-uploading {
+  color: var(--text-main);
+  border-color: rgba(82, 145, 133, 0.21);
+  background: rgba(255, 255, 255, 0.82) !important;
+  box-shadow: 0 18px 45px rgba(25, 90, 79, 0.09), inset 0 1px #fff;
+  backdrop-filter: blur(18px);
+}
+
+.doc-intel-screen .doc-upload-title,
+.doc-intel-screen .doc-chat-title,
+.doc-intel-screen .doc-viewer-title,
+.doc-intel-screen .doc-chat-welcome h3,
+.doc-intel-screen .doc-upload-zone h3 { color: #153f39; }
+
+.doc-intel-screen .doc-upload-zone,
+.doc-intel-screen .doc-chat-header,
+.doc-intel-screen .doc-chat-input-area,
+.doc-intel-screen .doc-chat-disclaimer,
+.doc-intel-screen .doc-viewer-header {
+  border-color: rgba(63, 126, 114, 0.14);
+  background: rgba(246, 251, 249, 0.9) !important;
+}
+
+.doc-intel-screen .doc-upload-zone:hover { border-color: rgba(15, 143, 123, 0.42); background: #eef9f6 !important; }
+.doc-intel-screen .doc-chat-input { color: #153f39; border-color: rgba(63, 126, 114, 0.22); background: #fff !important; }
+.doc-intel-screen .doc-chat-suggestion { color: #456b63; border-color: rgba(63, 126, 114, 0.16); background: #f5faf8 !important; }
+.doc-intel-screen .doc-chat-suggestion:hover { color: #087261; border-color: rgba(15, 143, 123, 0.32); background: #eaf7f3 !important; }
+.doc-intel-screen .doc-chat-assistant-message { color: #244e47; background: #f2f8f6 !important; border-color: rgba(63, 126, 114, 0.14); }
+
+/* Care & Supply Locator */
+.ms-care-locator-page .ms-map-filter-bar,
+.ms-care-locator-page .ms-facility-sidebar {
+  color: var(--text-main);
+  border-color: rgba(82, 145, 133, 0.22);
+  background: rgba(255, 255, 255, 0.82) !important;
+  box-shadow: 0 16px 40px rgba(25, 90, 79, 0.09), inset 0 1px #fff;
+  backdrop-filter: blur(18px);
+}
+
+.ms-care-locator-page .ms-filter-chip {
+  color: #55756e;
+  border-color: rgba(63, 126, 114, 0.15);
+  background: #f5faf8 !important;
+}
+
+.ms-care-locator-page .ms-filter-chip:hover { color: #087261; border-color: rgba(15, 143, 123, 0.3); background: #edf8f5 !important; }
+.ms-care-locator-page .ms-filter-chip--active { color: #087261; border-color: rgba(15, 143, 123, 0.35); background: #e1f4ef !important; box-shadow: inset 0 1px #fff; }
+.ms-care-locator-page .ms-btn-locate { color: #087261; border-color: rgba(15, 143, 123, 0.32); background: #e8f7f3 !important; }
+.ms-care-locator-page .ms-map-search-input { color: #153f39; border-color: rgba(63, 126, 114, 0.22); background: #f8fcfb !important; }
+.ms-care-locator-page .ms-map-search-input:focus { border-color: #0f8f7b; background: #fff !important; box-shadow: 0 0 0 4px rgba(15, 143, 123, 0.1); }
+
+.ms-care-locator-page .ms-facility-card {
+  color: var(--text-main);
+  border-color: rgba(63, 126, 114, 0.14);
+  background: rgba(247, 252, 250, 0.94) !important;
+}
+
+.ms-care-locator-page .ms-facility-card:hover { border-color: rgba(15, 143, 123, 0.32); background: #edf8f5 !important; }
+.ms-care-locator-page .ms-facility-card--selected { border-color: rgba(15, 143, 123, 0.52); background: #e4f5f0 !important; box-shadow: inset 3px 0 #0f8f7b, 0 12px 28px rgba(25, 90, 79, 0.1); }
+.ms-care-locator-page .ms-facility-card__title,
+.ms-care-locator-page .ms-facility-count { color: #153f39; }
+.ms-care-locator-page .ms-facility-card__addr,
+.ms-care-locator-page .ms-facility-meta-header { color: #607a75; }
+.ms-care-locator-page .ms-map-canvas-wrapper { border-color: rgba(82, 145, 133, 0.22); box-shadow: 0 20px 48px rgba(25, 90, 79, 0.13); }
+.ms-care-locator-page .ms-place-drawer { color: var(--text-main); border-color: rgba(82, 145, 133, 0.25); background: rgba(255, 255, 255, 0.97) !important; box-shadow: 0 24px 60px rgba(25, 90, 79, 0.18); }
+.ms-care-locator-page .ms-place-drawer__title,
+.ms-care-locator-page .ms-supply-title { color: #153f39; }
+.ms-care-locator-page .ms-place-drawer__category,
+.ms-care-locator-page .ms-place-meta { color: #607a75; }
+
+@media (max-width: 860px) {
+  .app-container .sidebar { background: rgba(255, 255, 255, 0.92) !important; }
+}
+
+/* Viewport-fit corrections. The transition wrapper used to shrink around the
+   workspace at browser zoom levels, which left a blank column on the right. */
+#root > .ms-screen {
+  width: 100vw;
+  width: 100dvw;
+  max-width: none;
+  min-width: 100vw;
+  min-width: 100dvw;
+  min-height: 100svh;
+  flex: 1 0 auto;
+  align-self: stretch;
+  overflow-x: clip;
+}
+
+html,
+body,
+#root {
+  width: 100vw !important;
+  width: 100dvw !important;
+  max-width: none !important;
+  min-width: 100vw;
+  min-width: 100dvw;
+  overflow-x: hidden;
+}
+
+#root > .ms-screen > .app-container,
+#root > .ms-screen > .doc-intel-screen,
+#root > .ms-screen > .ms-care-locator-page {
+  width: 100vw;
+  width: 100dvw;
+  max-width: none;
+  min-width: 0;
+}
+
+#root > .ms-screen > .app-container {
+  display: grid;
+  grid-template-columns: clamp(300px, 21vw, 340px) minmax(0, 1fr);
+}
+
+.app-container .sidebar {
+  width: 100%;
+  max-width: none;
+}
+
+.app-container .content-wrapper {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.app-container .ms-topbar,
+.doc-intel-screen .ms-topbar,
+.ms-care-locator-page .ms-topbar {
+  width: 100%;
+  max-width: none;
+  min-height: 64px;
+  padding-block: 0.45rem;
+}
+
+.app-container .ms-x-workspace-intro {
+  width: calc(100% - 2rem);
+  max-width: none;
+  min-height: 116px;
+  margin: 0.8rem 1rem;
+  padding: 0.9rem 1.1rem;
+}
+
+.app-container .dashboard-area {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  padding: 0 1rem 1rem;
+}
+
+.app-container .ms-empty {
+  min-height: clamp(340px, calc(100svh - 232px), 455px);
+}
+
+.doc-intel-screen .doc-intel-context,
+.doc-intel-screen .doc-intel-main {
+  width: calc(100% - 2rem);
+  max-width: none;
+  min-width: 0;
+  margin-inline: 1rem;
+}
+
+.doc-intel-screen .doc-intel-main {
+  min-height: 0;
+  padding: 0.8rem 0 1rem;
+}
+
+.ms-care-locator-page .ms-care-locator-main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+@media (max-width: 1220px) {
+  .app-container .ms-x-workspace-intro {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .app-container .ms-x-workspace-intro__trust { display: none; }
+}
+
+@media (max-width: 860px) {
+  #root > .ms-screen > .app-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .app-container .sidebar {
+    width: 100%;
+    max-height: min(52svh, 520px);
+  }
+
+  .app-container .ms-x-workspace-intro {
+    width: calc(100% - 1.25rem);
+    margin: 0.65rem;
+  }
+
+  .app-container .dashboard-area { padding-inline: 0.65rem; }
+}
+
+@media (max-width: 620px) {
+  .app-container .ms-x-workspace-intro {
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .doc-intel-screen .doc-intel-context,
+  .doc-intel-screen .doc-intel-main {
+    width: calc(100% - 1rem);
+    margin-inline: 0.5rem;
+  }
+}
+
+/* Diabetes Risk uses a fixed workspace shell. The patient-input sidebar is
+   intentionally the only vertical scrolling surface on this screen. */
+html:has(.ms-risk-workspace),
+body:has(.ms-risk-workspace) {
+  overflow: hidden;
+}
+
+#root:has(.ms-risk-workspace) > .ms-screen {
+  overflow: visible;
+}
+
+#root > .ms-screen > .ms-risk-workspace {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-content);
+  grid-template-rows: minmax(0, 1fr);
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ms-risk-workspace .sidebar {
+  position: relative;
+  top: auto;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.ms-risk-workspace .content-wrapper {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ms-risk-workspace .ms-topbar,
+.ms-risk-workspace .ms-x-workspace-intro {
+  flex: 0 0 auto;
+}
+
+.ms-risk-workspace .dashboard-area {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ms-risk-workspace .dashboard-area > .ms-reveal,
+.ms-risk-workspace .dashboard-area .ms-empty {
+  height: 100%;
+  min-height: 0;
+}
+
+.ms-risk-workspace .dashboard-area > .ms-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 860px) {
+  #root > .ms-screen > .ms-risk-workspace {
+    grid-template-rows: minmax(190px, 42svh) minmax(0, 1fr);
+  }
+
+  .ms-risk-workspace .sidebar,
+  .ms-risk-workspace .content-wrapper {
+    height: 100%;
+    max-height: none;
+    min-height: 0;
+  }
+}

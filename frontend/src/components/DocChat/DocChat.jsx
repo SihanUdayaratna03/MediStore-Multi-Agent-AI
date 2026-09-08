@@ -14,7 +14,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useDocChatService } from '../../services/docChatService'
 import CitationPanel from '../CitationPanel/CitationPanel'
-import { Send, RotateCcw, FileQuestion } from 'lucide-react'
+import { Send, RotateCcw, FileQuestion, FolderOpen, CheckCircle2, Paperclip, ChevronUp, ChevronDown, Stethoscope } from 'lucide-react'
 import './DocChat.css'
 
 const DOC_SUGGESTIONS = [
@@ -77,11 +77,18 @@ export default function DocChat({ sessionData, isReady, onReset }) {
           </div>
         </div>
 
-        {messages.length > 0 && (
-          <button className="doc-chat-clear-btn" onClick={clearChat} title="Clear conversation">
-            <RotateCcw size={15} />
-          </button>
-        )}
+        <div className="doc-chat-header-actions">
+          {messages.length > 0 && (
+            <button type="button" className="doc-chat-clear-btn" onClick={clearChat} title="Clear conversation" aria-label="Clear conversation">
+              <RotateCcw size={15} />
+            </button>
+          )}
+          {isReady && (
+            <button type="button" className="doc-chat-new-btn" onClick={onReset}>
+              <FolderOpen size={14} aria-hidden="true" /> New document
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -89,7 +96,7 @@ export default function DocChat({ sessionData, isReady, onReset }) {
         {/* Welcome / not ready state */}
         {!isReady && (
           <div className="doc-chat-welcome doc-chat-welcome--waiting">
-            <div className="doc-chat-welcome-icon">📂</div>
+            <div className="doc-chat-welcome-icon"><FolderOpen size={26} aria-hidden="true" /></div>
             <h4>Upload a document to start</h4>
             <p>
               Once you upload a medical document, you can ask questions about
@@ -101,7 +108,7 @@ export default function DocChat({ sessionData, isReady, onReset }) {
         {/* Ready state — no messages yet */}
         {isReady && messages.length === 0 && (
           <div className="doc-chat-welcome">
-            <div className="doc-chat-welcome-icon">✅</div>
+            <div className="doc-chat-welcome-icon"><CheckCircle2 size={26} aria-hidden="true" /></div>
             <h4>Document ready — ask anything!</h4>
             <p>
               Your document has been indexed. Ask questions about diagnoses,
@@ -110,6 +117,7 @@ export default function DocChat({ sessionData, isReady, onReset }) {
             <div className="doc-chat-suggestions">
               {DOC_SUGGESTIONS.map((s, i) => (
                 <button
+                  type="button"
                   key={i}
                   className="doc-chat-suggestion"
                   onClick={() => { setInputValue(s); inputRef.current?.focus() }}
@@ -136,13 +144,14 @@ export default function DocChat({ sessionData, isReady, onReset }) {
               {/* Citation badges */}
               {msg.citations && msg.citations.length > 0 && (
                 <button
+                  type="button"
                   className="doc-chat-citation-toggle"
                   onClick={() => setExpandedCitation(
                     expandedCitation === msg.id ? null : msg.id
                   )}
                 >
-                  📎 {msg.citations.length} source{msg.citations.length > 1 ? 's' : ''} cited
-                  {expandedCitation === msg.id ? ' ▲' : ' ▼'}
+                  <Paperclip size={13} aria-hidden="true" /> {msg.citations.length} source{msg.citations.length > 1 ? 's' : ''} cited
+                  {expandedCitation === msg.id ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}
                 </button>
               )}
 
@@ -180,7 +189,7 @@ export default function DocChat({ sessionData, isReady, onReset }) {
 
       {/* Disclaimer */}
       <div className="doc-chat-disclaimer">
-        ⚕️ AI analysis only — always consult a qualified healthcare professional
+        <Stethoscope size={14} aria-hidden="true" /> AI analysis only — always consult a qualified healthcare professional
       </div>
 
       {/* Input */}

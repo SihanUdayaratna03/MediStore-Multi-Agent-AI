@@ -10,6 +10,7 @@ import ResultDashboard from '../components/results/ResultDashboard'
 import { predictComplicationRisk } from '../api/api'
 import AnalysingState from '../components/results/AnalysingState'
 import Reveal from '../components/ui/Reveal'
+import WorkspaceIntro from '../components/ui/WorkspaceIntro'
 
 // ─── Option maps ──────────────────────────────────────────────────────────────
 const MED_OPTIONS = [[0, 'No'], [1, 'Steady'], [2, 'Up'], [-1, 'Down']]
@@ -105,21 +106,21 @@ const DEFAULT_FORM = {
 }
 
 const HIGH_RISK_RECS = [
-  { icon: '🏥', text: 'Immediate follow-up with diabetologist or endocrinologist — do not delay' },
-  { icon: '📊', text: 'Establish intensive glucose monitoring protocol — target HbA1c below 7%' },
-  { icon: '💊', text: 'Review and optimise current pharmacological regimen with the clinical team' },
-  { icon: '🧪', text: 'Order full metabolic panel: renal function, lipids, liver enzymes, HbA1c' },
-  { icon: '🥗', text: 'Refer to a clinical dietitian for personalised medical nutrition therapy' },
-  { icon: '📋', text: 'Develop a structured discharge plan with a 7-day post-discharge follow-up' },
+  { text: 'Immediate follow-up with diabetologist or endocrinologist — do not delay' },
+  { text: 'Establish intensive glucose monitoring protocol — target HbA1c below 7%' },
+  { text: 'Review and optimise current pharmacological regimen with the clinical team' },
+  { text: 'Order full metabolic panel: renal function, lipids, liver enzymes, HbA1c' },
+  { text: 'Refer to a clinical dietitian for personalised medical nutrition therapy' },
+  { text: 'Develop a structured discharge plan with a 7-day post-discharge follow-up' },
 ]
 
 const LOW_RISK_RECS = [
-  { icon: '📅', text: 'Schedule quarterly HbA1c monitoring and annual comprehensive metabolic panel' },
-  { icon: '🏃', text: 'Maintain structured physical activity — 150 min/week moderate aerobic exercise' },
-  { icon: '🥗', text: 'Adhere to a balanced, low-GI diet; limit refined carbohydrates and processed foods' },
-  { icon: '💊', text: 'Continue current medication regimen and reinforce adherence with patient education' },
-  { icon: '⚖️', text: 'Monitor weight trajectory; target BMI 18.5–24.9 to reduce complication risk' },
-  { icon: '😴', text: 'Ensure 7–9 hours of quality sleep — poor sleep significantly worsens glycaemic control' },
+  { text: 'Schedule quarterly HbA1c monitoring and annual comprehensive metabolic panel' },
+  { text: 'Maintain structured physical activity — 150 min/week moderate aerobic exercise' },
+  { text: 'Adhere to a balanced, low-GI diet; limit refined carbohydrates and processed foods' },
+  { text: 'Continue current medication regimen and reinforce adherence with patient education' },
+  { text: 'Monitor weight trajectory; target BMI 18.5–24.9 to reduce complication risk' },
+  { text: 'Ensure 7–9 hours of quality sleep — poor sleep significantly worsens glycaemic control' },
 ]
 
 // ─── Collapsible advanced section ─────────────────────────────────────────────
@@ -136,8 +137,8 @@ function AdvancedSection({ form, onChange }) {
         style={{
           width: '100%',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.6rem',
-          background: open ? 'rgba(139,92,246,0.14)' : 'rgba(139,92,246,0.06)',
-          border: '1px solid rgba(139,92,246,0.3)',
+          background: open ? 'rgba(201,179,111,0.14)' : 'rgba(201,179,111,0.06)',
+          border: '1px solid rgba(201,179,111,0.3)',
           borderRadius: 'var(--r-md)',
           padding: '0.8rem 1rem',
           cursor: 'pointer',
@@ -153,7 +154,7 @@ function AdvancedSection({ form, onChange }) {
         }}>
           <span style={{
             width: 18, height: 18, borderRadius: '50%',
-            background: 'rgba(139,92,246,0.25)', border: '1px solid rgba(139,92,246,0.5)',
+            background: 'rgba(201,179,111,0.22)', border: '1px solid rgba(201,179,111,0.46)',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '0.7rem', fontWeight: 800, color: 'var(--violet-400)',
           }} aria-hidden="true">
@@ -161,7 +162,7 @@ function AdvancedSection({ form, onChange }) {
           </span>
           Advanced Fields
         </span>
-        <span style={{ fontSize: '0.7rem', color: 'rgba(196,181,253,0.65)', fontFamily: 'var(--font-body)' }}>
+          <span style={{ fontSize: '0.7rem', color: 'rgba(240,232,207,0.68)', fontFamily: 'var(--font-body)' }}>
           {open ? 'Collapse' : '29 optional'}
         </span>
         <ChevronDown
@@ -180,8 +181,8 @@ function AdvancedSection({ form, onChange }) {
           id="advanced-fields"
           className="ms-fade-in"
           style={{
-            background: 'rgba(139,92,246,0.04)',
-            border: '1px solid rgba(139,92,246,0.18)',
+            background: 'rgba(201,179,111,0.04)',
+            border: '1px solid rgba(201,179,111,0.18)',
             borderRadius: 'var(--r-md)',
             padding: 'var(--sp-4)',
             marginBottom: 'var(--sp-2)',
@@ -255,7 +256,7 @@ function AdvancedSection({ form, onChange }) {
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export default function ComplicationPredictor({ onBack, onOpenCareMap }) {
+export default function ComplicationPredictor({ onBack, onNavigate, onOpenCareMap }) {
   const [form, setForm] = useState(DEFAULT_FORM)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
@@ -365,8 +366,8 @@ export default function ComplicationPredictor({ onBack, onOpenCareMap }) {
     <div className="app-container">
       <Sidebar title="Patient Record" accent="violet">
         <div className="ms-pill" style={{
-          background: 'rgba(139,92,246,0.15)',
-          borderColor: 'rgba(139,92,246,0.35)',
+          background: 'rgba(201,179,111,0.14)',
+          borderColor: 'rgba(201,179,111,0.34)',
           color: 'var(--violet-300)',
           marginBottom: 'var(--sp-5)',
         }}>
@@ -490,8 +491,8 @@ export default function ComplicationPredictor({ onBack, onOpenCareMap }) {
             className="submit-btn"
             style={{
               background: 'linear-gradient(135deg, var(--violet-500), var(--violet-700))',
-              borderColor: 'rgba(196,181,253,0.4)',
-              boxShadow: '0 6px 22px rgba(124,58,237,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+              borderColor: 'rgba(240,232,207,0.4)',
+              boxShadow: '0 6px 22px rgba(135,109,53,0.38), inset 0 1px 0 rgba(255,255,255,0.2)',
             }}
           >
             {loading
@@ -509,7 +510,21 @@ export default function ComplicationPredictor({ onBack, onOpenCareMap }) {
       </Sidebar>
 
       <div className="content-wrapper">
-        <TopBar moduleName="Complication Risk · v3" accent="violet" onBack={onBack} />
+        <TopBar
+          moduleName="Complication Risk · v3"
+          accent="violet"
+          activeModule="v3"
+          onNavigate={onNavigate}
+          onBack={onBack}
+        />
+
+        <WorkspaceIntro
+          code="PREDICT-02"
+          title="Complication risk intelligence"
+          description="Synthesise clinical history, admissions, diagnostics and medication context into an early readmission risk signal."
+          metrics={[[52, 'Clinical features'], ['3×', 'Model ensemble'], ['SHAP', 'Explainability']]}
+          accent="violet"
+        />
 
         <main className="dashboard-area" id="main">
           {loading && <AnalysingState accent="violet" />}

@@ -421,6 +421,10 @@
 /* ── Disclaimer ─────────────────────────────────────────────────────────────── */
 
 .copilot-disclaimer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   padding: 6px 16px;
   font-size: 0.68rem;
   color: rgba(160, 190, 210, 0.45);

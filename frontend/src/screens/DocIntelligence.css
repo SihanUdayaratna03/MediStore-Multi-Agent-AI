@@ -14,7 +14,7 @@
   align-items: center;
   gap: var(--sp-4, 1rem);
   padding: 1rem 2rem;
-  background: rgba(15, 23, 42, 0.65);
+  background: rgba(8, 33, 28, 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #34d399;
+  color: #71d6bd;
 }
 
 .doc-intel-title {
@@ -88,7 +88,7 @@
   background: rgba(52, 211, 153, 0.1);
   border: 1px solid rgba(52, 211, 153, 0.25);
   border-radius: 9999px;
-  color: #34d399;
+  color: #71d6bd;
   font-size: 0.8rem;
   font-weight: 500;
   max-width: 250px;
@@ -126,7 +126,7 @@
   align-items: center;
   justify-content: center;
   padding: 3rem 2rem;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(8, 33, 28, 0.58);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
@@ -144,7 +144,7 @@
 
 .doc-intel-upload-bar {
   height: 100%;
-  background: linear-gradient(90deg, #34d399, #38bdf8);
+  background: linear-gradient(90deg, #71d6bd, #78d4c3);
   border-radius: 9999px;
   transition: width 0.3s ease;
 }
