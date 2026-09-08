@@ -1,7 +1,7 @@
 <div align="center">
 
- feat/frontend-ui-updates
-# 🩺 MediStore AI — Clinical Diabetic Intelligence & Care Platform
+ 
+# 🩺 MediStore AI 
 
 
 
@@ -498,7 +498,7 @@ All trained `.pkl` artifacts and feature definitions are saved directly to `mode
 ---
 
 <div align="center">
-  <sub>Built with  by the MediStore AI Engineering Team · Clinical Intelligence for Better Health Outcomes</sub>
+
 =======
   <sub> MediStore AI Engineering </sub>
 
