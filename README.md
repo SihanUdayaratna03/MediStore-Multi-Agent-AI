@@ -1,7 +1,7 @@
 <div align="center">
 
  
- #🩺 MediStore AI 
+ # 🩺 MediStore AI 
 
 
 
