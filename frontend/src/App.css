@@ -18,7 +18,7 @@ body {
   min-height: 100vh;
   /* Photographic ground stays — it is the brand. The canvas field and the
      gradient wash below sit on top of it to add depth. */
-  background-image: url('/background.png');
+  background-image: url('/medistore-lake-dashboard-v2.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -40,9 +40,9 @@ body::before {
   z-index: var(--z-bg);
   pointer-events: none;
   background:
-    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(56, 189, 248, 0.2), transparent 58%),
-    radial-gradient(ellipse 100% 70% at 100% 100%, rgba(124, 58, 237, 0.2), transparent 60%),
-    radial-gradient(ellipse 150% 110% at 50% 45%, rgba(2, 6, 23, 0.84) 0%, rgba(1, 3, 13, 0.95) 100%);
+    radial-gradient(ellipse 120% 80% at 20% -10%, rgba(120, 212, 195, 0.16), transparent 58%),
+    radial-gradient(ellipse 100% 70% at 100% 100%, rgba(201, 179, 111, 0.11), transparent 60%),
+    linear-gradient(180deg, rgba(3, 16, 14, 0.48), rgba(3, 16, 14, 0.84));
 }
 
 ::selection { background: rgba(56, 189, 248, 0.32); color: #fff; }
@@ -983,6 +983,10 @@ select.input-field {
 }
 
 .ms-disclaimer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   padding: 0.9rem 1.1rem;
   background: var(--glass-inset);
   border-radius: var(--r-md);
@@ -1646,4 +1650,931 @@ select.input-field {
     break-inside: avoid;
   }
   .ms-shap img { filter: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FOREST LAKE EXPERIENCE — 2026 redesign
+   The generated landscape establishes the visual language. Interface layers
+   stay code-native so typography, forms and clinical data remain crisp.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ms-field__canvas { opacity: 0.18; }
+.ms-field__grid {
+  opacity: 0.38;
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 95% 80% at 50% 35%, #000 8%, transparent 76%);
+  -webkit-mask-image: radial-gradient(ellipse 95% 80% at 50% 35%, #000 8%, transparent 76%);
+}
+.ms-orb--sky { background: radial-gradient(circle, rgba(72, 177, 157, 0.34), transparent 68%); }
+.ms-orb--violet { background: radial-gradient(circle, rgba(205, 186, 123, 0.18), transparent 68%); }
+.ms-orb--teal { background: radial-gradient(circle, rgba(128, 196, 176, 0.2), transparent 70%); }
+
+.app-container { background: linear-gradient(90deg, rgba(3, 16, 14, 0.14), rgba(3, 16, 14, 0.38)); }
+.sidebar {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent 24%),
+    rgba(5, 25, 21, 0.88);
+  border-right-color: rgba(156, 227, 214, 0.2);
+}
+.sidebar::after {
+  background: linear-gradient(180deg, transparent, rgba(120, 212, 195, 0.52) 28%, rgba(201, 179, 111, 0.22) 76%, transparent);
+}
+.ms-topbar {
+  background: rgba(4, 20, 17, 0.74);
+  border-bottom-color: rgba(156, 227, 214, 0.16);
+}
+.ms-brand__mark {
+  background: linear-gradient(145deg, rgba(82, 188, 168, 0.52), rgba(18, 77, 66, 0.54));
+  border-color: rgba(156, 227, 214, 0.38);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 24px rgba(20, 102, 88, 0.3);
+}
+.glass-panel {
+  background:
+    linear-gradient(155deg, rgba(255,255,255,0.065), transparent 36%),
+    rgba(13, 39, 34, 0.74);
+  border-color: rgba(165, 213, 202, 0.22);
+  box-shadow: 0 20px 60px rgba(1, 12, 10, 0.3), inset 0 1px 0 rgba(255,255,255,0.045);
+}
+.ms-btn--primary {
+  --btn-bg: linear-gradient(135deg, #52bda9, #247e70);
+  --btn-border: rgba(190, 244, 232, 0.45);
+  color: #f8fffd;
+  box-shadow: 0 8px 26px rgba(30, 126, 108, 0.34), inset 0 1px 0 rgba(255,255,255,0.24);
+}
+.ms-btn--primary:hover:not(:disabled) {
+  box-shadow: 0 14px 38px rgba(43, 153, 132, 0.42), inset 0 1px 0 rgba(255,255,255,0.28);
+}
+
+/* Split-screen access portal */
+.ms-auth-screen {
+  position: relative;
+  z-index: var(--z-content);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.ms-auth-shell {
+  width: min(1460px, 100%);
+  min-height: min(900px, calc(100vh - clamp(1.5rem, 4vw, 3rem)));
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
+  overflow: hidden;
+  border: 1px solid rgba(196, 232, 222, 0.24);
+  border-radius: clamp(22px, 3vw, 34px);
+  background: rgba(5, 24, 20, 0.88);
+  box-shadow: 0 36px 100px rgba(0, 10, 8, 0.62), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.ms-auth-visual {
+  position: relative;
+  min-height: 620px;
+  overflow: hidden;
+}
+.ms-auth-visual__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% center;
+  transform: scale(1.015);
+  animation: ms-hero-breathe 16s var(--ease-in-out) infinite alternate;
+}
+.ms-auth-visual__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 18, 15, 0.52), rgba(3, 18, 15, 0.04) 62%),
+    linear-gradient(180deg, rgba(3, 18, 15, 0.22), transparent 34%, rgba(2, 15, 12, 0.8));
+}
+.ms-auth-visual__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  min-height: 620px;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.6rem, 4vw, 3.4rem);
+}
+.ms-auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  font-family: var(--font-display);
+}
+.ms-auth-brand__mark {
+  width: 43px;
+  height: 43px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #e8fff9;
+  background: rgba(9, 58, 49, 0.68);
+  border: 1px solid rgba(185, 240, 228, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 10px 30px rgba(2,20,16,0.34);
+  backdrop-filter: blur(14px);
+}
+.ms-auth-brand strong { display: block; font-size: 1.02rem; letter-spacing: -0.02em; }
+.ms-auth-brand small {
+  display: block;
+  margin-top: 0.1rem;
+  color: rgba(230, 248, 243, 0.74);
+  font: 500 0.68rem/1.2 var(--font-body);
+  letter-spacing: 0.06em;
+}
+.ms-auth-story { margin: auto 0; max-width: 660px; }
+.ms-kicker,
+.ms-auth-panel__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.75rem;
+  border: 1px solid rgba(190, 239, 227, 0.28);
+  border-radius: var(--r-pill);
+  color: #bdeee3;
+  background: rgba(4, 35, 29, 0.44);
+  backdrop-filter: blur(14px);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.ms-auth-story h1 {
+  margin: 1.2rem 0 1rem;
+  max-width: 12ch;
+  color: #f6fffc;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.75rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  text-shadow: 0 8px 30px rgba(0, 13, 10, 0.36);
+}
+.ms-auth-story p {
+  max-width: 54ch;
+  color: rgba(237, 250, 246, 0.84);
+  font-size: clamp(0.96rem, 1.5vw, 1.1rem);
+  line-height: 1.75;
+  text-shadow: 0 2px 12px rgba(0, 13, 10, 0.46);
+}
+.ms-auth-proof {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+.ms-auth-proof > div {
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(202, 235, 227, 0.2);
+  border-radius: 15px;
+  background: rgba(3, 27, 22, 0.4);
+  backdrop-filter: blur(16px);
+}
+.ms-auth-proof strong { display: block; color: #fff; font: 700 1.16rem/1 var(--font-display); }
+.ms-auth-proof span { display: block; margin-top: 0.4rem; color: rgba(230,246,241,0.7); font-size: 0.68rem; line-height: 1.35; }
+
+.ms-auth-panel {
+  display: grid;
+  place-items: center;
+  padding: clamp(2rem, 5vw, 5.5rem);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(87, 176, 158, 0.13), transparent 36%),
+    linear-gradient(165deg, rgba(13, 43, 37, 0.98), rgba(4, 22, 18, 0.99));
+}
+.ms-auth-panel__inner { width: min(440px, 100%); }
+.ms-auth-panel__eyebrow { background: rgba(73, 157, 140, 0.08); }
+.ms-auth-panel h2 {
+  margin: 1.4rem 0 0.45rem;
+  color: #f7fffd;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 4vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+.ms-auth-panel__lede { color: var(--text-muted); line-height: 1.65; }
+.ms-login-form { display: grid; gap: 1.05rem; margin-top: 2rem; }
+.ms-login-field { display: grid; gap: 0.5rem; }
+.ms-login-field > span:first-child { color: #e7f4f0; font-size: 0.78rem; font-weight: 650; }
+.ms-login-field__control {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 52px;
+  padding: 0 0.9rem;
+  border: 1px solid rgba(171, 215, 204, 0.22);
+  border-radius: 13px;
+  color: #8fcabc;
+  background: rgba(2, 17, 14, 0.5);
+  transition: border-color var(--dur-fast), background var(--dur-fast), box-shadow var(--dur-fast);
+}
+.ms-login-field__control:focus-within {
+  border-color: rgba(120, 212, 195, 0.72);
+  background: rgba(2, 17, 14, 0.72);
+  box-shadow: 0 0 0 4px rgba(85, 184, 165, 0.1);
+}
+.ms-login-field__control input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #f5fffc;
+  background: transparent;
+  font: 500 0.9rem var(--font-body);
+}
+.ms-login-field__control input::placeholder { color: rgba(188, 215, 208, 0.46); }
+.ms-password-toggle,
+.ms-text-action,
+.ms-icon-btn {
+  appearance: none;
+  border: 0;
+  color: var(--text-dim);
+  background: transparent;
+  cursor: pointer;
+}
+.ms-password-toggle { display: grid; place-items: center; padding: 0.35rem; border-radius: 7px; }
+.ms-password-toggle:hover,
+.ms-text-action:hover { color: var(--sky-300); }
+.ms-login-options { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.ms-checkbox { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--text-muted); font-size: 0.75rem; cursor: pointer; }
+.ms-checkbox input { position: absolute; opacity: 0; pointer-events: none; }
+.ms-checkbox > span {
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(166, 211, 200, 0.38);
+  border-radius: 5px;
+  color: transparent;
+  background: rgba(3, 18, 15, 0.5);
+}
+.ms-checkbox input:checked + span { color: #effffb; border-color: #61c9b5; background: #328f7e; }
+.ms-checkbox input:focus-visible + span { outline: 2px solid var(--sky-400); outline-offset: 3px; }
+.ms-text-action { font: 600 0.75rem var(--font-body); }
+.ms-login-error {
+  margin: -0.15rem 0;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(252, 165, 165, 0.24);
+  border-radius: 10px;
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.18);
+  font-size: 0.76rem;
+}
+.ms-login-submit { width: 100%; border-radius: 13px; min-height: 54px; }
+.ms-auth-divider { display: flex; align-items: center; gap: 0.8rem; margin: 1.5rem 0; color: var(--text-dim); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.ms-auth-divider::before,
+.ms-auth-divider::after { content: ''; height: 1px; flex: 1; background: rgba(164, 205, 195, 0.16); }
+.ms-demo-btn {
+  width: 100%;
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1px solid rgba(156, 227, 214, 0.28);
+  border-radius: 13px;
+  color: #dff8f2;
+  background: rgba(112, 190, 173, 0.06);
+  font: 650 0.87rem var(--font-display);
+  cursor: pointer;
+  transition: transform var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast);
+}
+.ms-demo-btn:hover { transform: translateY(-2px); border-color: rgba(156, 227, 214, 0.54); background: rgba(112, 190, 173, 0.12); }
+.ms-auth-trust { display: grid; gap: 0.65rem; margin-top: 1.8rem; }
+.ms-auth-trust span { display: flex; align-items: center; gap: 0.55rem; color: var(--text-muted); font-size: 0.74rem; }
+.ms-auth-trust svg { color: var(--sky-400); }
+.ms-auth-note { margin-top: 1.7rem; color: rgba(181, 207, 200, 0.52); font-size: 0.65rem; line-height: 1.55; }
+
+/* Signed-in module hub */
+.ms-hub-screen { background: linear-gradient(180deg, rgba(3,18,15,0.08), rgba(3,18,15,0.36)); }
+.ms-hub-nav {
+  width: min(1320px, calc(100% - 2rem));
+  margin: 1rem auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(161, 211, 200, 0.2);
+  border-radius: 18px;
+  background: rgba(5, 26, 22, 0.66);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 16px 46px rgba(1, 13, 10, 0.28);
+}
+.ms-auth-brand--compact .ms-auth-brand__mark { width: 38px; height: 38px; border-radius: 11px; }
+.ms-hub-user { display: flex; align-items: center; gap: 0.7rem; }
+.ms-user-avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #edfffb;
+  background: linear-gradient(145deg, #4cb7a3, #236f63);
+  font: 750 0.8rem var(--font-display);
+}
+.ms-hub-user__copy { display: grid; gap: 0.08rem; }
+.ms-hub-user__copy small { color: var(--text-dim); font-size: 0.62rem; }
+.ms-hub-user__copy strong { max-width: 220px; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); font-size: 0.75rem; white-space: nowrap; }
+.ms-icon-btn {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(163, 208, 198, 0.2);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.035);
+}
+.ms-icon-btn:hover { color: #fff; border-color: rgba(163, 208, 198, 0.42); background: rgba(255,255,255,0.07); }
+.ms-hub-content { justify-content: flex-start; padding-top: clamp(3.5rem, 8vh, 7rem); }
+.ms-hub-content .ms-hero__title {
+  max-width: 16ch;
+  background: linear-gradient(150deg, #fff 22%, #bfeee4 72%, #d8c892 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.ms-mode-grid { max-width: 1050px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mode-card {
+  min-height: 310px;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(150deg, rgba(255,255,255,0.065), transparent 36%),
+    rgba(12, 42, 35, 0.72);
+  border-color: rgba(162, 213, 201, 0.22);
+  box-shadow: 0 20px 55px rgba(1, 13, 10, 0.28), inset 0 1px 0 rgba(255,255,255,0.045);
+}
+.mode-card__cta { margin-top: auto; }
+.mode-card--sky { border-color: rgba(120, 212, 195, 0.3); }
+.mode-card--sky[data-active='true'] { border-color: rgba(120, 212, 195, 0.72); box-shadow: var(--shadow-lift), 0 18px 48px rgba(42, 146, 125, 0.2); }
+.mode-card--violet { border-color: rgba(201, 179, 111, 0.3); }
+.mode-card--violet[data-active='true'] { border-color: rgba(223, 208, 159, 0.72); box-shadow: var(--shadow-lift), 0 18px 48px rgba(141, 116, 52, 0.2); }
+.mode-card--emerald { border-color: rgba(110, 231, 183, 0.28); }
+.mode-card--emerald[data-active='true'] { border-color: rgba(110, 231, 183, 0.7); box-shadow: var(--shadow-lift), 0 18px 48px rgba(23, 123, 86, 0.2); }
+.mode-card--sky .mode-card__orb { background: radial-gradient(circle, rgba(120, 212, 195, 0.23), transparent 70%); }
+.mode-card--violet .mode-card__orb { background: radial-gradient(circle, rgba(201, 179, 111, 0.2), transparent 70%); }
+.mode-card--emerald .mode-card__orb { background: radial-gradient(circle, rgba(52, 211, 153, 0.2), transparent 70%); }
+.mode-card--sky .mode-card__icon { background: linear-gradient(140deg, rgba(51, 143, 126, 0.48), rgba(120, 212, 195, 0.12)); border-color: rgba(120, 212, 195, 0.4); }
+.mode-card--violet .mode-card__icon { background: linear-gradient(140deg, rgba(135, 109, 53, 0.46), rgba(201, 179, 111, 0.12)); border-color: rgba(201, 179, 111, 0.4); }
+.mode-card--emerald .mode-card__icon { background: linear-gradient(140deg, rgba(20, 121, 84, 0.46), rgba(52, 211, 153, 0.12)); border: 1px solid rgba(52, 211, 153, 0.38); }
+.mode-card--emerald .mode-card__version,
+.mode-card--emerald .mode-card__cta { color: #6ee7b7; }
+
+@keyframes ms-hero-breathe {
+  from { transform: scale(1.015); }
+  to { transform: scale(1.055); }
+}
+
+@media (max-width: 980px) {
+  .ms-auth-screen { padding: 0; }
+  .ms-auth-shell { min-height: 100vh; grid-template-columns: 1fr; border: 0; border-radius: 0; }
+  .ms-auth-visual { min-height: 46vh; }
+  .ms-auth-visual__content { min-height: 46vh; }
+  .ms-auth-story { margin-top: auto; }
+  .ms-auth-story h1 { font-size: clamp(2.7rem, 10vw, 4.8rem); }
+  .ms-auth-proof { display: none; }
+  .ms-auth-panel { padding: 3.2rem clamp(1.4rem, 8vw, 5rem); }
+}
+
+@media (max-width: 720px) {
+  .ms-auth-visual { min-height: 400px; }
+  .ms-auth-visual__content { min-height: 400px; padding: 1.4rem; }
+  .ms-auth-story h1 { margin-top: 0.9rem; }
+  .ms-auth-story p { max-width: 40ch; }
+  .ms-hub-nav { margin-top: 0.65rem; }
+  .ms-auth-brand--compact small,
+  .ms-hub-user__copy { display: none; }
+  .ms-hub-content { padding: 3rem 1rem 2rem; }
+  .ms-mode-grid { grid-template-columns: 1fr; }
+  .mode-card { min-height: 0; }
+}
+
+@media (max-width: 480px) {
+  .ms-auth-visual { min-height: 360px; }
+  .ms-auth-visual__content { min-height: 360px; }
+  .ms-auth-story p { font-size: 0.88rem; line-height: 1.6; }
+  .ms-auth-panel { padding: 2.6rem 1.2rem 2rem; }
+  .ms-login-options { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+  .ms-auth-trust { display: none; }
+  .ms-auth-note { margin-top: 1.2rem; }
+}
+
+@media print {
+  .ms-auth-screen,
+  .ms-hub-nav { display: none !important; }
+}
+
+/* Public website: editorial structure inspired by the reference, expressed in MediStore green. */
+.ms-public-page {
+  --public-bg: #f3f6f2;
+  --public-paper: #ffffff;
+  --public-ink: #10201b;
+  --public-muted: #64736d;
+  --public-edge: rgba(16, 52, 42, 0.12);
+  --public-accent: #176b59;
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  color: var(--public-ink);
+  background: var(--public-bg);
+}
+
+.ms-public-page button,
+.ms-public-page a { font-family: var(--font-body); }
+
+.ms-public-nav-wrap {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+  pointer-events: none;
+}
+
+.ms-public-nav {
+  width: min(1160px, 100%);
+  min-height: 64px;
+  margin: 0 auto;
+  padding: 0.55rem 0.65rem 0.55rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(18, 61, 49, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(22px) saturate(160%);
+  box-shadow: inset 0 1px rgba(255,255,255,0.95), 0 18px 44px -24px rgba(8, 49, 38, 0.35);
+  pointer-events: auto;
+}
+
+.ms-public-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 0;
+  color: var(--public-ink);
+  background: transparent;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ms-public-brand strong { color: var(--public-accent); }
+.ms-public-brand__mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(145deg, #248873, #0d4d3f);
+  box-shadow: inset 0 1px rgba(255,255,255,0.26), 0 8px 20px rgba(23,107,89,0.2);
+}
+
+.ms-public-nav__links { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2rem); }
+.ms-public-nav__links a,
+.ms-public-nav__links button,
+.ms-public-signin {
+  border: 0;
+  color: #4d5d57;
+  background: transparent;
+  font-size: 0.79rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ms-public-nav__links a:hover,
+.ms-public-nav__links button:hover,
+.ms-public-signin:hover { color: var(--public-accent); }
+.ms-public-nav__actions { display: flex; align-items: center; gap: 0.45rem; }
+
+.ms-public-primary,
+.ms-public-secondary {
+  min-height: 50px;
+  padding: 0 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+.ms-public-primary {
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #fff;
+  background: linear-gradient(180deg, #23836f, #135d4d 60%, #0c463a);
+  box-shadow: inset 0 1px rgba(255,255,255,0.22), 0 12px 26px -14px rgba(10,71,57,0.8);
+}
+.ms-public-primary:hover { transform: translateY(-2px); box-shadow: inset 0 1px rgba(255,255,255,0.25), 0 18px 34px -15px rgba(10,71,57,0.75); }
+.ms-public-primary--sm { min-height: 42px; padding: 0 1.1rem; font-size: 0.77rem; }
+.ms-public-secondary { border: 1px solid var(--public-edge); color: var(--public-ink); background: rgba(255,255,255,0.7); }
+.ms-public-menu { display: none; width: 40px; height: 40px; border: 0; border-radius: 50%; color: var(--public-ink); background: #edf2ef; }
+
+.ms-public-hero {
+  position: relative;
+  min-height: 780px;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  padding: 9.5rem max(5vw, calc((100vw - 1160px) / 2)) 6rem;
+}
+.ms-public-hero__art { position: absolute; inset: 0; overflow: hidden; }
+.ms-public-hero__art img { position: absolute; inset: 0 0 0 auto; width: 66%; height: 100%; object-fit: cover; object-position: 54% center; filter: saturate(0.78) contrast(0.94); }
+.ms-public-hero__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(110% 118% at -5% 50%, #f3f6f2 0%, #f3f6f2 30%, rgba(243,246,242,0.94) 48%, rgba(243,246,242,0.2) 72%, transparent 80%),
+    linear-gradient(180deg, rgba(243,246,242,0.9), transparent 30%, transparent 70%, #f3f6f2);
+}
+.ms-public-hero__copy { position: relative; z-index: 1; width: min(650px, 58vw); }
+.ms-public-eyebrow { display: inline-flex; align-items: center; gap: 0.65rem; color: #4c635b; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.ms-public-eyebrow > span { width: 7px; height: 7px; border-radius: 50%; background: #2a9a82; box-shadow: 0 0 0 5px rgba(42,154,130,0.12); }
+.ms-public-hero h1 {
+  margin: 1.4rem 0 1.2rem;
+  color: #11231d;
+  font-family: var(--font-editorial);
+  font-size: clamp(4.25rem, 7.6vw, 7.5rem);
+  font-weight: 400;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+}
+.ms-public-hero h1 em { color: #1d705f; font-weight: 400; }
+.ms-public-hero__copy > p { max-width: 58ch; color: #52645d; font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.75; }
+.ms-public-hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+.ms-public-proofline { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-top: 2rem; color: #586962; font-size: 0.72rem; font-weight: 600; }
+.ms-public-proofline span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.ms-public-proofline svg { color: #1e7b67; }
+
+.ms-public-strip {
+  width: min(1160px, calc(100% - 2rem));
+  min-height: 92px;
+  margin: -46px auto 0;
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 2fr auto auto auto auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--public-edge);
+  border-radius: 24px;
+  background: rgba(255,255,255,0.86);
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px #fff, 0 24px 54px -34px rgba(13,69,55,0.42);
+}
+.ms-public-strip > span { font-family: var(--font-editorial); font-size: 1.3rem; }
+.ms-public-strip strong { color: #165f50; font: 400 1.8rem/1 var(--font-editorial); }
+.ms-public-strip small { max-width: 80px; color: var(--public-muted); font-size: 0.67rem; line-height: 1.25; }
+
+.ms-public-section { width: min(1160px, calc(100% - 2rem)); margin: 0 auto; padding: 9rem 0; }
+.ms-public-section__heading { display: flex; align-items: end; justify-content: space-between; gap: 3rem; margin-bottom: 3rem; }
+.ms-public-section h2,
+.ms-public-workflow h2,
+.ms-public-safety h2,
+.ms-public-cta h2 { margin-top: 1rem; font: 400 clamp(3rem, 5vw, 5rem)/0.98 var(--font-editorial); letter-spacing: -0.035em; }
+.ms-public-section__heading h2 { max-width: 13ch; }
+.ms-public-section__heading > p { max-width: 40ch; color: var(--public-muted); line-height: 1.7; }
+.ms-public-card-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+.ms-public-card { min-height: 360px; display: flex; flex-direction: column; padding: 1.5rem; border: 1px solid var(--public-edge); border-radius: 26px; background: rgba(255,255,255,0.76); box-shadow: inset 0 1px #fff, 0 24px 50px -40px rgba(9,60,47,0.36); transition: transform 220ms ease, box-shadow 220ms ease; }
+.ms-public-card:hover { transform: translateY(-4px); box-shadow: inset 0 1px #fff, 0 30px 58px -38px rgba(9,60,47,0.42); }
+.ms-public-card__top { display: flex; justify-content: space-between; align-items: center; }
+.ms-public-card__icon { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 16px; color: #176b59; background: #e1eee9; }
+.ms-public-card__number { color: #8b9993; font-family: var(--font-editorial); }
+.ms-public-card h3 { margin-top: auto; font: 400 2rem/1.05 var(--font-editorial); }
+.ms-public-card p { margin-top: 0.9rem; color: var(--public-muted); font-size: 0.86rem; line-height: 1.65; }
+.ms-public-card__meta { margin-top: 1.3rem; padding-top: 1rem; border-top: 1px solid var(--public-edge); color: #2c685a; font-size: 0.69rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.ms-public-workflow { display: grid; grid-template-columns: 0.95fr 1.05fr; min-height: 680px; background: #e6eee9; }
+.ms-public-workflow__visual { position: relative; min-height: 560px; display: flex; flex-direction: column; justify-content: end; margin: 2rem; padding: 2.2rem; overflow: hidden; border-radius: 30px; color: #fff; background: linear-gradient(145deg, rgba(4,39,31,0.12), rgba(4,39,31,0.72)), url('/medistore-lake-dashboard-v2.png') center/cover; }
+.ms-public-workflow__mark { position: absolute; top: 2rem; left: 2rem; width: 70px; height: 70px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,0.26); border-radius: 50%; background: rgba(5,45,36,0.34); backdrop-filter: blur(14px); }
+.ms-public-workflow__signal { position: absolute; inset: auto 8% 38% 8%; height: 1px; background: rgba(255,255,255,0.34); box-shadow: 0 0 26px rgba(125,224,202,0.7); }
+.ms-public-workflow__visual small { color: rgba(255,255,255,0.7); font-size: 0.69rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ms-public-workflow__visual strong { display: block; max-width: 12ch; margin-top: 0.5rem; font: 400 2.5rem/1 var(--font-editorial); }
+.ms-public-workflow__copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 7vw, 7rem); }
+.ms-public-workflow__copy h2 { max-width: 10ch; }
+.ms-public-steps { margin-top: 2.5rem; }
+.ms-public-step { display: grid; grid-template-columns: 44px 1fr; gap: 1rem; padding: 1.25rem 0; border-top: 1px solid rgba(16,52,42,0.13); }
+.ms-public-step > span { color: #267563; font: 400 1.1rem var(--font-editorial); }
+.ms-public-step h3 { font-size: 0.92rem; font-weight: 700; }
+.ms-public-step p { margin-top: 0.35rem; color: var(--public-muted); font-size: 0.79rem; line-height: 1.55; }
+
+.ms-public-safety { width: min(1160px, calc(100% - 2rem)); margin: 7rem auto; padding: clamp(2rem, 6vw, 5rem); display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 4rem; border-radius: 34px; color: #effbf7; background: linear-gradient(145deg, #143f35, #08251e); box-shadow: 0 34px 70px -44px rgba(0,31,23,0.8); }
+.ms-public-safety h2 { max-width: 12ch; }
+.ms-public-safety > div > p { max-width: 50ch; margin-top: 1.4rem; color: rgba(232,249,243,0.67); line-height: 1.7; }
+.ms-public-eyebrow--light { color: #b8ddd3; }
+.ms-public-safety__items { display: grid; align-content: center; gap: 0.8rem; }
+.ms-public-safety__items > span { display: grid; grid-template-columns: 32px 1fr; padding: 1rem 0; border-bottom: 1px solid rgba(225,248,241,0.12); }
+.ms-public-safety__items svg { grid-row: span 2; color: #7dd3bf; }
+.ms-public-safety__items strong { font-size: 0.86rem; }
+.ms-public-safety__items small { margin-top: 0.25rem; color: rgba(232,249,243,0.58); }
+
+.ms-public-cta { max-width: 820px; margin: 0 auto; padding: 5rem 1rem 8rem; text-align: center; }
+.ms-public-cta .ms-public-eyebrow { justify-content: center; }
+.ms-public-cta h2 { margin-bottom: 2rem; }
+.ms-public-footer { width: min(1160px, calc(100% - 2rem)); margin: 0 auto; padding: 1.6rem 0 2.4rem; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 2rem; border-top: 1px solid var(--public-edge); color: var(--public-muted); }
+.ms-public-footer p { font-size: 0.78rem; }
+.ms-public-footer small { font-size: 0.66rem; }
+
+@media (max-width: 900px) {
+  .ms-public-nav__links { position: absolute; top: 74px; left: 1rem; right: 1rem; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 0.8rem; border: 1px solid var(--public-edge); border-radius: 20px; background: rgba(255,255,255,0.96); box-shadow: 0 20px 44px -26px rgba(8,49,38,0.4); }
+  .ms-public-nav__links.is-open { display: flex; }
+  .ms-public-nav__links a,
+  .ms-public-nav__links button { padding: 0.8rem; text-align: left; }
+  .ms-public-menu { display: grid; place-items: center; }
+  .ms-public-hero { min-height: 720px; }
+  .ms-public-hero__copy { width: min(620px, 72vw); }
+  .ms-public-strip { grid-template-columns: 1fr auto auto auto auto auto auto; }
+  .ms-public-strip > span { font-size: 1rem; }
+  .ms-public-section__heading { align-items: start; flex-direction: column; }
+  .ms-public-card-grid { grid-template-columns: 1fr; }
+  .ms-public-card { min-height: 280px; }
+  .ms-public-workflow { grid-template-columns: 1fr; }
+  .ms-public-workflow__copy { order: -1; }
+  .ms-public-safety { grid-template-columns: 1fr; gap: 2rem; }
+  .ms-public-footer { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+@media (max-width: 620px) {
+  .ms-public-nav-wrap { padding: 0.65rem; }
+  .ms-public-nav { min-height: 58px; padding: 0.42rem 0.45rem 0.42rem 0.75rem; }
+  .ms-public-signin { display: none; }
+  .ms-public-primary--sm { display: none; }
+  .ms-public-hero { min-height: 760px; align-items: end; padding: 7.5rem 1.2rem 4rem; }
+  .ms-public-hero__art img { width: 100%; height: 58%; top: 0; }
+  .ms-public-hero__art::after { background: linear-gradient(180deg, rgba(243,246,242,0.18), rgba(243,246,242,0.56) 30%, #f3f6f2 58%, #f3f6f2); }
+  .ms-public-hero__copy { width: 100%; }
+  .ms-public-hero h1 { font-size: clamp(3.7rem, 17vw, 5.2rem); }
+  .ms-public-proofline { display: grid; gap: 0.7rem; }
+  .ms-public-strip { margin-top: 0; grid-template-columns: 1fr 1fr; gap: 0.4rem 1rem; border-radius: 20px; }
+  .ms-public-strip > span { grid-column: 1 / -1; margin-bottom: 0.6rem; }
+  .ms-public-section { padding: 6rem 0; }
+  .ms-public-section h2,
+  .ms-public-workflow h2,
+  .ms-public-safety h2,
+  .ms-public-cta h2 { font-size: clamp(2.7rem, 13vw, 4rem); }
+  .ms-public-workflow__visual { min-height: 420px; margin: 0 1rem 1rem; }
+  .ms-public-workflow__copy { padding: 4rem 1.2rem; }
+  .ms-public-safety { margin: 5rem auto; padding: 2rem 1.25rem; border-radius: 26px; }
+}
+
+/* Dedicated sign-in and account pages */
+.ms-public-auth-page { min-height: 100vh; }
+.ms-public-auth {
+  width: min(1260px, calc(100% - 2rem));
+  min-height: calc(100vh - 2rem);
+  margin: 0 auto;
+  padding: 7.5rem 0 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(400px, 0.95fr);
+}
+.ms-public-auth__story { position: relative; min-height: 690px; overflow: hidden; border-radius: 30px 0 0 30px; background: #123d33; }
+.ms-public-auth__story img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.72) contrast(0.94); }
+.ms-public-auth__story::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,34,27,0.12), rgba(4,34,27,0.24) 36%, rgba(3,27,21,0.9)); }
+.ms-public-auth__story-copy { position: absolute; inset: auto clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem); z-index: 1; color: #fff; }
+.ms-public-auth__story h1 { max-width: 11ch; margin: 1rem 0; font: 400 clamp(3.4rem, 5vw, 5.6rem)/0.92 var(--font-editorial); letter-spacing: -0.035em; }
+.ms-public-auth__story p { max-width: 48ch; color: rgba(240,251,247,0.72); line-height: 1.65; }
+.ms-public-auth__assurances { display: flex; flex-wrap: wrap; gap: 0.7rem 1.1rem; margin-top: 1.6rem; color: rgba(240,251,247,0.8); font-size: 0.72rem; font-weight: 600; }
+.ms-public-auth__assurances span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.ms-public-auth__panel { display: grid; place-items: center; padding: clamp(2rem, 5vw, 4.5rem); border: 1px solid var(--public-edge); border-left: 0; border-radius: 0 30px 30px 0; background: rgba(255,255,255,0.9); }
+.ms-public-auth__panel-inner { width: min(420px, 100%); }
+.ms-public-auth__kicker { display: inline-flex; align-items: center; gap: 0.45rem; color: #176b59; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+.ms-public-auth__panel h2 { margin: 1rem 0 0.45rem; font: 400 clamp(2.6rem, 4vw, 4rem)/1 var(--font-editorial); letter-spacing: -0.035em; }
+.ms-public-auth__panel-inner > p { color: var(--public-muted); font-size: 0.88rem; line-height: 1.6; }
+.ms-public-auth__form { display: grid; gap: 1rem; margin-top: 1.8rem; }
+.ms-public-auth__field { display: grid; gap: 0.45rem; }
+.ms-public-auth__field > span:first-child { color: #334a42; font-size: 0.74rem; font-weight: 700; }
+.ms-public-auth__control { min-height: 50px; display: flex; align-items: center; gap: 0.65rem; padding: 0 0.85rem; border: 1px solid rgba(17,70,57,0.15); border-radius: 13px; color: #5d7b71; background: #f7faf8; transition: border-color 160ms ease, box-shadow 160ms ease; }
+.ms-public-auth__control:focus-within { border-color: rgba(27,121,100,0.58); box-shadow: 0 0 0 4px rgba(37,139,117,0.08); }
+.ms-public-auth__control input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--public-ink); background: transparent; font-size: 0.83rem; }
+.ms-public-auth__control input::placeholder { color: #9aa9a3; }
+.ms-public-auth__control button { display: grid; place-items: center; padding: 0.25rem; border: 0; color: #71867e; background: transparent; cursor: pointer; }
+.ms-public-auth__remember { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--public-muted); font-size: 0.72rem; cursor: pointer; }
+.ms-public-auth__remember input { position: absolute; opacity: 0; pointer-events: none; }
+.ms-public-auth__remember > span { width: 17px; height: 17px; display: grid; place-items: center; border: 1px solid #9fb3ab; border-radius: 5px; color: transparent; background: #fff; }
+.ms-public-auth__remember input:checked + span { border-color: #176b59; color: #fff; background: #176b59; }
+.ms-public-auth__error { padding: 0.7rem 0.8rem; border: 1px solid rgba(190,24,93,0.14); border-radius: 10px; color: #a3184c; background: #fff2f6; font-size: 0.74rem; }
+.ms-public-auth__submit { width: 100%; }
+.ms-public-auth__divider { display: flex; align-items: center; gap: 0.7rem; margin: 1.2rem 0; color: #9aa9a3; font-size: 0.67rem; text-transform: uppercase; }
+.ms-public-auth__divider::before,
+.ms-public-auth__divider::after { content: ''; height: 1px; flex: 1; background: var(--public-edge); }
+.ms-public-auth__demo { width: 100%; min-height: 48px; border: 1px solid var(--public-edge); border-radius: 999px; color: var(--public-ink); background: #fff; font-size: 0.79rem; font-weight: 700; cursor: pointer; }
+.ms-public-auth__demo:hover { border-color: rgba(23,107,89,0.35); color: #176b59; }
+.ms-public-auth__switch { margin-top: 1.3rem; text-align: center; color: var(--public-muted); font-size: 0.74rem; }
+.ms-public-auth__switch button { border: 0; color: #176b59; background: transparent; font-weight: 700; cursor: pointer; }
+.ms-public-auth__note { display: block; margin-top: 1.5rem; color: #8a9993; text-align: center; font-size: 0.62rem; line-height: 1.5; }
+
+.ms-hub-links { display: flex; align-items: center; gap: 0.3rem; }
+.ms-hub-links button { padding: 0.55rem 0.75rem; border: 0; border-radius: 999px; color: var(--text-muted); background: transparent; font-size: 0.72rem; font-weight: 650; cursor: pointer; }
+.ms-hub-links button:hover { color: #effffb; background: rgba(255,255,255,0.06); }
+
+@media (max-width: 980px) {
+  .ms-public-auth { width: min(720px, calc(100% - 1rem)); grid-template-columns: 1fr; }
+  .ms-public-auth__story { min-height: 420px; border-radius: 28px 28px 0 0; }
+  .ms-public-auth__story h1 { font-size: clamp(3.2rem, 9vw, 5rem); }
+  .ms-public-auth__panel { border: 1px solid var(--public-edge); border-top: 0; border-radius: 0 0 28px 28px; }
+  .ms-hub-links { display: none; }
+}
+
+@media (max-width: 620px) {
+  .ms-public-auth { width: 100%; padding: 5.5rem 0 0; }
+  .ms-public-auth__story { min-height: 360px; border-radius: 0; }
+  .ms-public-auth__assurances { display: none; }
+  .ms-public-auth__panel { padding: 2.5rem 1.2rem 2rem; border-inline: 0; border-radius: 0; }
+}
+
+/* ── Premium workspace navigation ─────────────────────────────────────────
+   Every clinical surface shares this compact command bar. It keeps modules
+   one click apart while preserving the active patient workspace below. */
+.ms-topbar {
+  min-height: 72px;
+  padding: 0.65rem clamp(0.85rem, 2vw, 1.6rem);
+  flex-wrap: nowrap;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.035), transparent),
+    rgba(3, 20, 17, 0.82);
+  border-bottom-color: rgba(169, 220, 207, 0.16);
+  box-shadow: 0 16px 44px -34px rgba(0, 8, 6, 0.9);
+}
+
+.ms-brand--workspace { min-width: 190px; }
+.ms-brand__copy { display: grid; gap: 0.14rem; min-width: 0; }
+.ms-brand__product { color: #f4fffc; font-size: 0.83rem; letter-spacing: -0.025em; }
+.ms-brand__module {
+  max-width: 230px;
+  overflow: hidden;
+  font: 650 0.66rem/1.2 var(--font-body);
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ms-workspace-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(169, 220, 207, 0.14);
+  border-radius: 14px;
+  background: rgba(0, 12, 10, 0.34);
+  box-shadow: inset 0 1px rgba(255,255,255,0.035);
+}
+.ms-workspace-nav__item {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  padding: 0 0.68rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #91aaa3;
+  background: transparent;
+  font: 650 0.68rem/1 var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dur-fast), background var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast);
+}
+.ms-workspace-nav__item:hover {
+  color: #e9faf5;
+  background: rgba(255,255,255,0.055);
+}
+.ms-workspace-nav__item[data-active='true'] {
+  color: #edfffb;
+  border-color: rgba(137, 222, 204, 0.24);
+  background: linear-gradient(180deg, rgba(96, 190, 171, 0.19), rgba(56, 137, 121, 0.12));
+  box-shadow: inset 0 1px rgba(255,255,255,0.08), 0 8px 20px rgba(0,10,8,0.2);
+}
+.ms-workspace-nav__item[data-active='true'] svg { color: var(--sky-300); }
+
+.ms-topbar__actions { display: flex; align-items: center; gap: 0.5rem; }
+.ms-system-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #9bb5ad;
+  font-size: 0.64rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.ms-system-status svg { color: #71d6bd; }
+.ms-secure-session {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(155, 215, 201, 0.17);
+  border-radius: 10px;
+  color: #9bcfc2;
+  background: rgba(255,255,255,0.035);
+}
+.ms-btn--workspace { min-height: 36px; padding: 0 0.68rem; font-size: 0.68rem; border-radius: 10px; }
+
+/* Document intelligence now uses the same product shell as every module. */
+.doc-intel-screen { position: relative; z-index: var(--z-content); background: linear-gradient(180deg, rgba(3,19,16,0.12), rgba(3,19,16,0.38)); }
+.doc-intel-context {
+  width: min(1536px, calc(100% - 4rem));
+  margin: 1rem auto 0;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(139, 215, 197, 0.18);
+  border-radius: 16px;
+  background: rgba(8, 33, 28, 0.64);
+  backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px rgba(255,255,255,0.045), 0 18px 38px -32px rgba(0, 8, 6, 0.8);
+}
+.doc-intel-context__icon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #a1eadb;
+  background: rgba(80, 183, 161, 0.12);
+  border: 1px solid rgba(124, 219, 199, 0.22);
+}
+.doc-intel-context > span:nth-child(2) { min-width: 0; display: grid; gap: 0.12rem; }
+.doc-intel-context strong { overflow: hidden; color: #f1fffb; font-size: 0.78rem; text-overflow: ellipsis; white-space: nowrap; }
+.doc-intel-context small { color: #8da69f; font-size: 0.67rem; }
+.doc-intel-context__badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.7rem;
+  border-radius: var(--r-pill);
+  color: #aadfd2;
+  background: rgba(97, 180, 162, 0.09);
+  font-size: 0.64rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Consistent tactile and keyboard behaviour across public and workspace UI. */
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--sky-300);
+  outline-offset: 3px;
+}
+.ms-public-card:focus-within,
+.glass-panel:focus-within { border-color: rgba(143, 222, 205, 0.38); }
+button:active:not(:disabled) { transform: translateY(1px); }
+
+@media (max-width: 1220px) {
+  .ms-system-status { display: none; }
+  .ms-workspace-nav__item span { display: none; }
+  .ms-workspace-nav__item { width: 38px; padding: 0; }
+}
+
+@media (max-width: 760px) {
+  .ms-topbar { min-height: 62px; gap: 0.6rem; }
+  .ms-brand--workspace { min-width: 0; }
+  .ms-brand__product { font-size: 0.76rem; }
+  .ms-brand__module { max-width: 130px; }
+  .ms-workspace-nav {
+    position: fixed;
+    z-index: var(--z-topbar);
+    inset: auto 0.65rem 0.65rem;
+    justify-content: space-around;
+    padding: 0.42rem;
+    border-color: rgba(156, 227, 214, 0.23);
+    background: rgba(3, 21, 17, 0.94);
+    backdrop-filter: blur(24px) saturate(150%);
+    box-shadow: 0 16px 44px rgba(0, 8, 6, 0.55), inset 0 1px rgba(255,255,255,0.06);
+  }
+  .ms-workspace-nav__item { width: 44px; min-height: 42px; }
+  .ms-secure-session { display: none; }
+  .ms-btn--workspace span { display: none; }
+  .ms-btn--workspace { width: 36px; padding: 0; }
+  .dashboard-area,
+  .doc-intel-main,
+  .ms-care-locator-main { padding-bottom: 5.7rem !important; }
+  .doc-intel-context { width: calc(100% - 1.5rem); }
+  .doc-intel-context__badge { display: none; }
+}
+
+@media (max-width: 460px) {
+  .ms-brand__module { display: none; }
+  .ms-brand__mark { width: 32px; height: 32px; }
+}
+
+@supports not (backdrop-filter: blur(2px)) {
+  .ms-topbar,
+  .ms-public-nav,
+  .glass-panel,
+  .sidebar,
+  .doc-intel-context { background-color: #0a2721; }
 }

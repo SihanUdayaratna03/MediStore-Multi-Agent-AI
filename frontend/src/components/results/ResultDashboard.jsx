@@ -8,7 +8,6 @@ import ProbabilityBars from '../charts/ProbabilityBars'
 import FactorBalance from '../charts/FactorBalance'
 import ShapViewer from '../charts/ShapViewer'
 import Reveal from '../ui/Reveal'
-import Tilt3D from '../ui/Tilt3D'
 
 /* Severity presentation. A status colour never travels alone — each level
    carries its own icon and its own word, so the meaning survives greyscale,
@@ -170,7 +169,7 @@ export default function ResultDashboard({
 
       {/* ── Gauge + probability bars ────────────────────────────────────── */}
       <Reveal>
-        <Tilt3D className="glass-panel" max={4}>
+        <div className="glass-panel">
           <h3 className="ms-panel-title">
             <Activity size={17} color={accentHex} aria-hidden="true" />
             Probability Breakdown
@@ -199,7 +198,7 @@ export default function ResultDashboard({
               />
             </div>
           </div>
-        </Tilt3D>
+        </div>
       </Reveal>
 
       {/* ── Factor balance ──────────────────────────────────────────────── */}
@@ -221,7 +220,7 @@ export default function ResultDashboard({
       {/* ── Factor detail ───────────────────────────────────────────────── */}
       <div className="ms-grid-2">
         <Reveal>
-          <Tilt3D className="glass-panel" max={4} style={{ height: '100%' }}>
+          <div className="glass-panel" style={{ height: '100%' }}>
             <h3 className="ms-panel-title">
               <AlertTriangle size={17} color="var(--status-critical)" aria-hidden="true" />
               Risk Factors
@@ -241,11 +240,11 @@ export default function ResultDashboard({
               emptyText="No significant risk factors identified"
               emptyLevel="g"
             />
-          </Tilt3D>
+          </div>
         </Reveal>
 
         <Reveal delay={80}>
-          <Tilt3D className="glass-panel" max={4} style={{ height: '100%' }}>
+          <div className="glass-panel" style={{ height: '100%' }}>
             <h3 className="ms-panel-title">
               <CheckCircle2 size={17} color="var(--status-good)" aria-hidden="true" />
               Positive Indicators
@@ -265,7 +264,7 @@ export default function ResultDashboard({
               emptyText="No strong positive indicators detected"
               emptyLevel="r"
             />
-          </Tilt3D>
+          </div>
         </Reveal>
       </div>
 
@@ -279,7 +278,7 @@ export default function ResultDashboard({
           <div className="ms-rec-grid ms-stagger">
             {recommendations.map((rec, i) => (
               <div className="ms-rec" key={rec.text} style={{ '--i': i }}>
-                <span className="ms-rec__icon" aria-hidden="true">{rec.icon}</span>
+                <span className="ms-rec__icon" aria-hidden="true"><CheckCircle2 size={17} /></span>
                 <span>{rec.text}</span>
               </div>
             ))}
@@ -301,7 +300,7 @@ export default function ResultDashboard({
 
       <Reveal>
         <p className="ms-disclaimer">
-          ⚠️ <strong>Medical Disclaimer</strong> — {disclaimer}
+          <AlertTriangle size={15} aria-hidden="true" /> <strong>Medical Disclaimer</strong> — {disclaimer}
         </p>
       </Reveal>
     </div>

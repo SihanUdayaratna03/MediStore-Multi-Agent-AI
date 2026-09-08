@@ -93,7 +93,7 @@ export function useChatService(predictionResult = null) {
         ...prev,
         {
           role:    'assistant',
-          content: `⚠️ ${errText}`,
+          content: `Error: ${errText}`,
           isError: true,
           id:      Date.now() + 1,
         },

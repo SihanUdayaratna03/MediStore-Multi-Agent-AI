@@ -32,13 +32,13 @@ export default function DocViewer({ sessionData }) {
           <p className="doc-viewer-filename" title={filename}>{filename}</p>
           <div className="doc-viewer-tags">
             <span className="doc-viewer-tag">
-              {doc_type === 'pdf' ? `📄 ${total_pages} page${total_pages !== 1 ? 's' : ''}` : '🖼️ Image'}
+              {doc_type === 'pdf' ? `${total_pages} page${total_pages !== 1 ? 's' : ''}` : 'Image'}
             </span>
             <span className="doc-viewer-tag">
-              🧩 {chunk_count} passages indexed
+              {chunk_count} passages indexed
             </span>
             <span className="doc-viewer-tag">
-              {extraction_method.includes('gemini') ? '👁️ Gemini Vision' : '📝 Native'}
+              {extraction_method.includes('gemini') ? 'Gemini Vision' : 'Native extraction'}
             </span>
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function DocViewer({ sessionData }) {
 
       {/* Ready to chat hint */}
       <div className="doc-viewer-ready-hint">
-        <span>✅</span>
+        <CheckCircle2 size={18} aria-hidden="true" />
         <p>
           Your document has been processed and indexed. Ask any question about it
           in the chat panel on the right!

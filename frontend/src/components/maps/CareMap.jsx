@@ -39,6 +39,7 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
   const [isLocating, setIsLocating] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchedTerm, setSearchedTerm] = useState('')
+  const [locationError, setLocationError] = useState('')
 
   // Fetch facilities based on current user coordinates & category
   const fetchPlaces = useCallback(async (lat, lng, category) => {
@@ -131,9 +132,10 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
   // Detect Live GPS Location of the user
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.')
+      setLocationError('Location services are not available in this browser. Showing the Colombo reference area instead.')
       return
     }
+    setLocationError('')
     setIsLocating(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -162,7 +164,7 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
       (err) => {
         console.warn('Geolocation denied or failed:', err)
         setIsLocating(false)
-        alert('Could not access current location. Please allow location permissions in your browser.')
+        setLocationError('We could not access your location. Allow location permission to see precise distances, or continue with the reference area.')
       },
       { timeout: 10000, enableHighAccuracy: true }
     )
@@ -172,8 +174,8 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
     return (
       <div className="ms-map-error glass-panel">
         <AlertTriangle size={32} color="var(--status-critical)" />
-        <h3>Failed to load Google Maps</h3>
-        <p>Please verify your <code>VITE_GOOGLE_MAPS_API_KEY</code> in <code>frontend/.env</code>.</p>
+        <h3>The care map is temporarily unavailable</h3>
+        <p>Nearby facilities cannot be displayed right now. Please try again in a moment.</p>
       </div>
     )
   }
@@ -194,6 +196,14 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
         riskLevel={riskLevel}
       />
 
+      {locationError && (
+        <div className="ms-location-notice" role="status">
+          <AlertTriangle size={15} aria-hidden="true" />
+          <span>{locationError}</span>
+          <button type="button" onClick={() => setLocationError('')} aria-label="Dismiss location notice"><X size={14} /></button>
+        </div>
+      )}
+
       {/* Main Full-Height Workspace */}
       <div className="ms-map-content-grid">
         {/* Left: Facility Sidebar */}
@@ -202,6 +212,7 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
             <Search size={16} className="ms-search-icon" />
             <input
               type="text"
+              aria-label="Search healthcare providers or cities"
               placeholder="Search pharmacy, hospital, clinic or city (e.g. Asiri, Kandy, Healthguard)…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -281,9 +292,11 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
               </div>
             ) : (
               facilities.map((fac) => (
-                <div
+                <button
+                  type="button"
                   key={fac.id}
                   className={`ms-facility-card ${selectedPlace?.id === fac.id ? 'ms-facility-card--selected' : ''}`}
+                  aria-pressed={selectedPlace?.id === fac.id}
                   onClick={() => {
                     setSelectedPlace(fac)
                     setCenter({ lat: fac.lat, lng: fac.lng })
@@ -305,7 +318,7 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
                       <span>{fac.supplies_available.slice(0, 2).join(' · ')}</span>
                     </div>
                   )}
-                </div>
+                </button>
               ))
             )}
           </div>
@@ -361,8 +374,8 @@ export default function CareMap({ riskLevel = 'all', preselectedCategory = 'all'
                   <div className="ms-info-window">
                     <strong className="ms-info-title">{selectedPlace.name}</strong>
                     <p className="ms-info-addr">{selectedPlace.address}</p>
-                    <span style={{ fontSize: '0.74rem', color: '#0284c7', fontWeight: 'bold', display: 'block', marginBottom: '6px' }}>
-                      📍 {selectedPlace.distance_km !== undefined ? `${selectedPlace.distance_km} km from you` : 'Near you'}
+                    <span style={{ fontSize: '0.74rem', color: '#278f7f', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
+                      <MapPin size={13} aria-hidden="true" /> {selectedPlace.distance_km !== undefined ? `${selectedPlace.distance_km} km from you` : 'Near you'}
                     </span>
                     <button
                       type="button"

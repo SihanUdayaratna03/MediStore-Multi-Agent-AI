@@ -144,12 +144,12 @@ export default function DocUpload({ onUpload, error }) {
       <div className="doc-upload-supported">
         <p className="doc-upload-supported-title">What can I upload?</p>
         <ul className="doc-upload-supported-list">
-          <li>📋 Doctor's reports & clinical notes</li>
-          <li>🧪 Lab results & blood test reports</li>
-          <li>💊 Prescription documents</li>
-          <li>🏥 Discharge summaries</li>
-          <li>🔬 Imaging reports (MRI, X-ray, CT descriptions)</li>
-          <li>📸 Medical report photos (JPG, PNG)</li>
+          <li>Doctor's reports and clinical notes</li>
+          <li>Lab results and blood test reports</li>
+          <li>Prescription documents</li>
+          <li>Discharge summaries</li>
+          <li>Imaging reports (MRI, X-ray, CT descriptions)</li>
+          <li>Medical report photos (JPG, PNG)</li>
         </ul>
       </div>
 

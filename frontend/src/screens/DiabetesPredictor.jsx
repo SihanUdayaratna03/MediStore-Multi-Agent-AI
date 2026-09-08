@@ -7,7 +7,7 @@ import ResultDashboard from '../components/results/ResultDashboard'
 import AnalysingState from '../components/results/AnalysingState'
 import Reveal from '../components/ui/Reveal'
 import { predictDiabetesRisk } from '../api/api'
-import CopilotChat from '../components/CopilotChat/CopilotChat'
+import WorkspaceIntro from '../components/ui/WorkspaceIntro'
 
 const INITIAL_FORM = {
   pregnancies: 0,
@@ -21,21 +21,21 @@ const INITIAL_FORM = {
 }
 
 const HIGH_RISK_RECS = [
-  { icon: '🏥', text: 'Consult a healthcare professional or endocrinologist as soon as possible' },
-  { icon: '🧪', text: 'Request a full diabetes panel: HbA1c, fasting plasma glucose, oral glucose tolerance test' },
-  { icon: '📊', text: 'Begin self-monitoring of blood glucose — aim for pre-meal readings below 7 mmol/L' },
-  { icon: '🥗', text: 'Reduce dietary refined sugars and processed carbohydrates; increase fibre intake' },
-  { icon: '🏃', text: 'Start structured physical activity — 150 min/week moderate aerobic exercise' },
-  { icon: '💊', text: 'Discuss pharmacological management options with your doctor' },
+  { text: 'Consult a healthcare professional or endocrinologist as soon as possible' },
+  { text: 'Request a full diabetes panel: HbA1c, fasting plasma glucose, oral glucose tolerance test' },
+  { text: 'Begin self-monitoring of blood glucose — aim for pre-meal readings below 7 mmol/L' },
+  { text: 'Reduce dietary refined sugars and processed carbohydrates; increase fibre intake' },
+  { text: 'Start structured physical activity — 150 min/week moderate aerobic exercise' },
+  { text: 'Discuss pharmacological management options with your doctor' },
 ]
 
 const LOW_RISK_RECS = [
-  { icon: '📅', text: 'Schedule annual blood glucose and HbA1c screening tests' },
-  { icon: '🥗', text: 'Maintain a balanced diet — Mediterranean or low-GI dietary patterns recommended' },
-  { icon: '🏃', text: 'Stay physically active — at least 150 minutes of moderate exercise per week' },
-  { icon: '⚖️', text: 'Maintain a healthy weight; even 5–7% weight reduction lowers diabetes risk' },
-  { icon: '💧', text: 'Stay well-hydrated — aim for 2–3 litres of water daily' },
-  { icon: '😴', text: 'Prioritise 7–9 hours of quality sleep — poor sleep increases insulin resistance' },
+  { text: 'Schedule annual blood glucose and HbA1c screening tests' },
+  { text: 'Maintain a balanced diet — Mediterranean or low-GI dietary patterns recommended' },
+  { text: 'Stay physically active — at least 150 minutes of moderate exercise per week' },
+  { text: 'Maintain a healthy weight; even 5–7% weight reduction lowers diabetes risk' },
+  { text: 'Stay well-hydrated — aim for 2–3 litres of water daily' },
+  { text: 'Prioritise 7–9 hours of quality sleep — poor sleep increases insulin resistance' },
 ]
 
 /**
@@ -43,7 +43,7 @@ const LOW_RISK_RECS = [
  * original App.jsx: same endpoint, same payload, same clinical thresholds.
  * Only the presentation layer is new.
  */
-export default function DiabetesPredictor({ onBack, onOpenCareMap }) {
+export default function DiabetesPredictor({ onBack, onNavigate, onOpenCareMap }) {
   const [formData, setFormData] = useState(INITIAL_FORM)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
@@ -100,7 +100,7 @@ export default function DiabetesPredictor({ onBack, onOpenCareMap }) {
   const recommendations = result?.prediction === 1 ? HIGH_RISK_RECS : LOW_RISK_RECS
 
   return (
-    <div className="app-container">
+    <div className="app-container ms-risk-workspace">
       <Sidebar title="Patient Biomarkers" accent="sky">
         <form onSubmit={handleSubmit}>
           <h2 className="form-section-title"><User size={14} aria-hidden="true" /> Demographics</h2>
@@ -157,7 +157,20 @@ export default function DiabetesPredictor({ onBack, onOpenCareMap }) {
       </Sidebar>
 
       <div className="content-wrapper">
-        <TopBar moduleName="Diabetes Risk · v2" accent="sky" onBack={onBack} />
+        <TopBar
+          moduleName="Diabetes Risk · v2"
+          accent="sky"
+          activeModule="v2"
+          onNavigate={onNavigate}
+          onBack={onBack}
+        />
+
+        <WorkspaceIntro
+          code="PREDICT-01"
+          title="Diabetes risk intelligence"
+          description="Turn eight essential biomarkers into an explainable probability, a balanced factor view and a clear path to next-step care."
+          metrics={[[8, 'Biomarkers'], ['SVM', 'Model'], ['SHAP', 'Explainability']]}
+        />
 
         <main className="dashboard-area" id="main">
           {loading && <AnalysingState accent="sky" />}
@@ -213,9 +226,6 @@ export default function DiabetesPredictor({ onBack, onOpenCareMap }) {
           )}
         </main>
       </div>
-
-      {/* CopilotChat — floats in bottom-right; auto-loads patient data as context */}
-      <CopilotChat predictionResult={result} />
 
     </div>
   )

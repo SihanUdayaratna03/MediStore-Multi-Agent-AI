@@ -1,6 +1,10 @@
 <div align="center">
 
+ feat/frontend-ui-updates
+# 🩺 MediStore AI — Clinical Diabetic Intelligence & Care Platform
+=======
 #  MediStore AI — Clinical Diabetic Intelligence & Care Platform
+
 
 **An Enterprise-Grade Healthcare AI Ecosystem for Diabetes Risk Assessment, Complication Prediction, Multi-Agent Clinical Document Intelligence & Live Care Routing**
 
@@ -495,5 +499,8 @@ All trained `.pkl` artifacts and feature definitions are saved directly to `mode
 ---
 
 <div align="center">
+  <sub>Built with  by the MediStore AI Engineering Team · Clinical Intelligence for Better Health Outcomes</sub>
+=======
   <sub> MediStore AI Engineering </sub>
+
 </div>

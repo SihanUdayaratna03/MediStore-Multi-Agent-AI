@@ -22,7 +22,7 @@ export default function PlaceDetailsModal({ place, onClose, userLocation }) {
             <span className="ms-place-drawer__category">{place.category_label}</span>
             {place.distance_km !== undefined && (
               <span className="ms-distance-badge">
-                📍 {place.distance_km} km {userLocation?.isLive ? 'from your location' : 'away'}
+                <MapPin size={13} aria-hidden="true" /> {place.distance_km} km {userLocation?.isLive ? 'from your location' : 'away'}
               </span>
             )}
           </div>

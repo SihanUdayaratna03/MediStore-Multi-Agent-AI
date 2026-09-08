@@ -1,6 +1,6 @@
 import { Stethoscope, Pill, FlaskConical, AlertCircle, Sparkles, Navigation } from 'lucide-react'
 
-export const CATEGORIES = [
+const CATEGORIES = [
     { id: 'all', label: 'All Facilities', icon: Sparkles },
     { id: 'endocrinologist', label: 'Endocrinologists & Specialists', icon: Stethoscope },
     { id: 'pharmacy', label: 'MediStore Pharmacies & Supplies', icon: Pill },

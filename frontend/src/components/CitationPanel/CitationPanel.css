@@ -12,9 +12,12 @@
 }
 
 .citation-panel-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #38bdf8;
+  color: #78d4c3;
   margin: 0;
 }
 
@@ -43,7 +46,7 @@
 .citation-card-page {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #34d399;
+  color: #71d6bd;
 }
 
 .citation-card-relevance {

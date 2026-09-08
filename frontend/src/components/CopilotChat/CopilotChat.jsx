@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useChatService } from '../../services/chatService'
+import { Stethoscope } from 'lucide-react'
 import './CopilotChat.css'
 
 /**
@@ -196,7 +197,7 @@ export default function CopilotChat({ predictionResult = null, defaultOpen = fal
 
         {/* Disclaimer */}
         <div className="copilot-disclaimer">
-          ⚕️ AI analysis only — always consult a qualified healthcare professional
+          <Stethoscope size={14} aria-hidden="true" /> AI analysis only — always consult a qualified healthcare professional
         </div>
 
         {/* Input area */}
