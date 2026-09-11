@@ -1,0 +1,9 @@
+Test ID,Test Name,Condition,AUC-ROC,Accuracy (%),F1 Score,AUC-ROC Degradation,Interpretation
+Baseline,Clean Test Set (No Perturbation),No perturbation,0.6793,88.9,0.0309,0.0,Reference performance on unperturbed test data
+T1-5pct,Noise Injection,5% feature σ noise,0.4906,11.16,0.2008,0.1887,Minor measurement noise / rounding errors
+T1-20pct,Noise Injection,20% feature σ noise,0.4861,11.16,0.2008,0.1932,Substantial data quality degradation
+T2-4feat,Feature Dropout,4 random features dropped,0.6646,83.35,0.2404,0.0147,~8% missing clinical features
+T2-10feat,Feature Dropout,10 random features dropped,0.6163,14.39,0.2055,0.063,~20% missing clinical features
+T3-top5,Top-Feature Sensitivity,Top-5 SHAP features removed,0.5423,11.16,0.2008,0.137,Removes the 5 most influential SHAP features
+T4-opt,Threshold Sensitivity,"Optimal threshold (θ=0.15, Youden's J)",0.6793,67.8,0.2833,0.0,Maximises Youden's J at θ=0.15
+T5-ci,Bootstrap CI,n=1000 bootstrap resamples,0.6794,88.91,0.0309,0.0,"95% CI [0.6676, 0.6909]  std=0.0058"

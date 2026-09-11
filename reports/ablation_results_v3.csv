@@ -1,0 +1,8 @@
+Variant ID,Variant Description,AUC-ROC,AUC-ROC Δ vs Baseline,Accuracy (%),Precision,Recall,F1 Score (Positive),F1 Score (Macro),F1 (Macro) Δ vs Baseline,Training Time (s)
+A0,Full Ensemble (Baseline),0.6694,0.0,88.88,0.5636,0.0137,0.0267,0.4838,0.0,22.2
+A1,XGBoost Only,0.6787,0.0093,88.86,0.5283,0.0123,0.0241,0.4825,-0.0013,6.6
+A2,LightGBM Only,0.6766,0.0072,88.9,0.6,0.0145,0.0284,0.4847,0.0009,3.9
+A3,Random Forest Only,0.6471,-0.0223,88.08,0.3274,0.0647,0.1081,0.5221,0.0383,15.4
+A4,No SMOTE Balancing,0.6874,0.018,88.88,0.6129,0.0084,0.0165,0.4788,-0.005,7.5
+A5,No Feature Engineering,0.6685,-0.0009,88.85,0.5227,0.0101,0.0199,0.4804,-0.0034,17.0
+A6,No Feature Scaling,0.6696,0.0002,88.89,0.5806,0.0159,0.0309,0.486,0.0022,16.8
