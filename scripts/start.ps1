@@ -11,7 +11,7 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root'; .\ven
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root'; .\venv\Scripts\activate; uvicorn backend.api.v3_server:app --reload --port 8001"
 
 # Start RAG Backend (port 8002)
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root'; .\venv\Scripts\activate; uvicorn backend.rag_main:app --reload --port 8002"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root'; .\venv\Scripts\activate; uvicorn backend.main:app --reload --port 8002"
 
 # Start Frontend (port 5173)
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\frontend'; npm run dev"
