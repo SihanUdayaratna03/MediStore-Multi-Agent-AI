@@ -1,0 +1,15 @@
+# =============================================================
+# MediStore AI — Azure Deployment Pipeline
+# File: .github/workflows/azure-deploy.yml
+#
+# Triggered on: Push to main branch (after docker-build completes)
+# Deploy targets:
+#   - Azure Container Apps / Azure App Service
+#   - backend-v2  → medistore-backend-v2.azurecontainerapps.io
+#   - backend-v3  → medistore-backend-v3.azurecontainerapps.io
+#   - backend-rag → medistore-rag.azurecontainerapps.io
+#   - frontend    → medistore-frontend.azurecontainerapps.io
+#
+# PASTE YOUR AZURE DEPLOY CODE BELOW THIS HEADER
+# =============================================================
+

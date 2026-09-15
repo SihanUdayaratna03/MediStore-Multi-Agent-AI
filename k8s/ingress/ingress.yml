@@ -1,0 +1,77 @@
+# ==============================================================================
+# MediStore AI — NGINX Ingress Controller (AKS path-based routing)
+# File: k8s/ingress/ingress.yml
+#
+# Public traffic routing:
+#   /             → frontend         (React 19 + Vite)
+#   /api/v2       → backend-v2:8000  (PIMA Diabetes Risk Predictor)
+#   /api/v3       → backend-v3:8001  (UCI-130 Complication Predictor)
+#   /api/rag      → backend-rag:8002 (LangGraph Multi-Agent RAG)
+#
+# Prerequisites:
+#   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.4/deploy/static/provider/cloud/deploy.yaml
+# ==============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: medistore-ingress
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization, Content-Type, Accept"
+    # TLS — uncomment and add cert-manager annotation for HTTPS
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  # TLS — uncomment block below and configure your domain for HTTPS
+  # tls:
+  #   - hosts:
+  #       - medistore.ai
+  #     secretName: medistore-tls
+  rules:
+    - host: medistore.ai       # ← Replace with your Azure Public IP or domain
+      http:
+        paths:
+          # Frontend — catch-all (must be last)
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: medistore-frontend
+                port:
+                  number: 80
+
+          # Backend v2 — PIMA Diabetes Risk API
+          - path: /api/v2(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: medistore-backend-v2
+                port:
+                  number: 8000
+
+          # Backend v3 — UCI Complication Risk API
+          - path: /api/v3(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: medistore-backend-v3
+                port:
+                  number: 8001
+
+          # RAG Backend — LangGraph Multi-Agent API
+          - path: /api/rag(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: medistore-backend-rag
+                port:
+                  number: 8002

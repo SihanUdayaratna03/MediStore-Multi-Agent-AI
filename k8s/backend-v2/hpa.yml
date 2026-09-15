@@ -1,0 +1,33 @@
+# ==============================================================================
+# MediStore AI — Backend v2 Horizontal Pod Autoscaler
+# File: k8s/backend-v2/hpa.yml
+# Scales: 2–5 pods | Target CPU: 70%
+# ==============================================================================
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: medistore-backend-v2-hpa
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: backend-v2
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: medistore-backend-v2
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80

@@ -1,0 +1,33 @@
+# ==============================================================================
+# MediStore AI — RAG Backend Horizontal Pod Autoscaler
+# File: k8s/backend-rag/hpa.yml
+# Scales: 1–3 pods | Target CPU: 60% (lower due to LLM memory pressure)
+# ==============================================================================
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: medistore-backend-rag-hpa
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: backend-rag
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: medistore-backend-rag
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 75

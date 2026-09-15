@@ -1,0 +1,11 @@
+# =============================================================
+# MediStore AI — Frontend CI Pipeline
+# File: .github/workflows/frontend-ci.yml
+#
+# Triggered on: Pull Requests targeting main/develop
+# Stack: React 18 + Vite (Port 5173)
+# Steps: Install → Lint → Build
+#
+# PASTE YOUR FRONTEND CI CODE BELOW THIS HEADER
+# =============================================================
+

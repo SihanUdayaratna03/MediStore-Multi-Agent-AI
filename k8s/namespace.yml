@@ -1,0 +1,19 @@
+# ==============================================================================
+# MediStore AI — Kubernetes Namespace
+# File: k8s/namespace.yml
+# ==============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: medistore-prod
+  labels:
+    app: medistore-ai
+    environment: production
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: medistore-staging
+  labels:
+    app: medistore-ai
+    environment: staging

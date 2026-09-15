@@ -1,0 +1,37 @@
+# ==============================================================================
+# MediStore AI — Kubernetes ConfigMap (non-sensitive config)
+# File: k8s/configmap.yml
+# ==============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: medistore-config
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+data:
+  PYTHONUNBUFFERED: "1"
+  BACKEND_V2_PORT: "8000"
+  BACKEND_V3_PORT: "8001"
+  BACKEND_RAG_PORT: "8002"
+  FRONTEND_PORT: "80"
+  CHOKIDAR_USEPOLLING: "false"
+  LOG_LEVEL: "info"
+  ENVIRONMENT: "production"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: medistore-config
+  namespace: medistore-staging
+  labels:
+    app: medistore-ai
+data:
+  PYTHONUNBUFFERED: "1"
+  BACKEND_V2_PORT: "8000"
+  BACKEND_V3_PORT: "8001"
+  BACKEND_RAG_PORT: "8002"
+  FRONTEND_PORT: "80"
+  CHOKIDAR_USEPOLLING: "false"
+  LOG_LEVEL: "debug"
+  ENVIRONMENT: "staging"

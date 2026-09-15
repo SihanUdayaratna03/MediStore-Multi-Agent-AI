@@ -1,0 +1,13 @@
+# =============================================================
+# MediStore AI — Docker Build & Push to Azure Container Registry
+# File: .github/workflows/docker-build.yml
+#
+# Triggered on: Push to main branch
+# Services built:
+#   - medistore-backend  (backend-v2 + backend-v3 shared image)
+#   - medistore-rag      (RAG / LangGraph backend)
+#   - medistore-frontend (React + Vite)
+#
+# PASTE YOUR DOCKER BUILD CODE BELOW THIS HEADER
+# =============================================================
+
