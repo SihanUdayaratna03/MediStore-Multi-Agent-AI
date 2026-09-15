@@ -1,0 +1,11 @@
+# =============================================================
+# MediStore AI — Backend CI Pipeline
+# File: .github/workflows/backend-ci.yml
+#
+# Triggered on: Pull Requests targeting main/develop
+# Tests: backend-v2 (Port 8000), backend-v3 (Port 8001),
+#        backend-rag (Port 8002)
+#
+# PASTE YOUR BACKEND CI CODE BELOW THIS HEADER
+# =============================================================
+

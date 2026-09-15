@@ -1,0 +1,22 @@
+# ==============================================================================
+# MediStore AI — Frontend Service
+# File: k8s/frontend/service.yml
+# ==============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: medistore-frontend
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: medistore-ai
+    service: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP

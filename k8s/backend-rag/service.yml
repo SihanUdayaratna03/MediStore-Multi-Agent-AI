@@ -1,0 +1,22 @@
+# ==============================================================================
+# MediStore AI — RAG Backend Service
+# File: k8s/backend-rag/service.yml
+# ==============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: medistore-backend-rag
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: backend-rag
+spec:
+  type: ClusterIP
+  selector:
+    app: medistore-ai
+    service: backend-rag
+  ports:
+    - name: http
+      port: 8002
+      targetPort: 8002
+      protocol: TCP

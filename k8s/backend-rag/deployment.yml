@@ -1,0 +1,115 @@
+# ==============================================================================
+# MediStore AI — RAG Backend Deployment (LangGraph Multi-Agent)
+# File: k8s/backend-rag/deployment.yml
+# Port: 8002 | uvicorn backend.rag_main:app
+# Note: Higher memory limits due to ChromaDB + LLM inference
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medistore-backend-rag
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: backend-rag
+    version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medistore-ai
+      service: backend-rag
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: medistore-ai
+        service: backend-rag
+    spec:
+      containers:
+        - name: backend-rag
+          image: medistoreacr.azurecr.io/medistore-rag:latest
+          command:
+            - uvicorn
+            - backend.rag_main:app
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "8002"
+            - --workers
+            - "1"
+          ports:
+            - containerPort: 8002
+              name: http
+          envFrom:
+            - configMapRef:
+                name: medistore-config
+            - secretRef:
+                name: medistore-secrets
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "3Gi"
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: 8002
+            initialDelaySeconds: 40
+            periodSeconds: 15
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: 8002
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3
+          volumeMounts:
+            - name: chroma-storage
+              mountPath: /app/chroma_db
+            - name: uploads-storage
+              mountPath: /app/uploads
+      volumes:
+        - name: chroma-storage
+          persistentVolumeClaim:
+            claimName: medistore-chroma-pvc
+        - name: uploads-storage
+          persistentVolumeClaim:
+            claimName: medistore-uploads-pvc
+      imagePullSecrets:
+        - name: acr-secret
+---
+# PersistentVolumeClaim for ChromaDB vector store
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: medistore-chroma-pvc
+  namespace: medistore-prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 10Gi
+---
+# PersistentVolumeClaim for uploaded PDFs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: medistore-uploads-pvc
+  namespace: medistore-prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 20Gi

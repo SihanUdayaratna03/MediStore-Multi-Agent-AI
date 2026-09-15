@@ -1,0 +1,66 @@
+# ==============================================================================
+# MediStore AI — Frontend Deployment (React 19 + Vite served via Nginx)
+# File: k8s/frontend/deployment.yml
+# Port: 80 (Nginx serves built Vite dist)
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medistore-frontend
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medistore-ai
+      service: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: medistore-ai
+        service: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: medistoreacr.azurecr.io/medistore-frontend:latest
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: VITE_BACKEND_V2_URL
+              value: "https://medistore.ai/api/v2"
+            - name: VITE_BACKEND_V3_URL
+              value: "https://medistore.ai/api/v3"
+            - name: VITE_RAG_URL
+              value: "https://medistore.ai/api/rag"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: acr-secret

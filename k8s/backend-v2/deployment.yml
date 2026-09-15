@@ -1,0 +1,74 @@
+# ==============================================================================
+# MediStore AI — Backend v2 Deployment (PIMA Diabetes Risk Predictor)
+# File: k8s/backend-v2/deployment.yml
+# Port: 8000 | uvicorn backend.api.v2_server:app
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medistore-backend-v2
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: backend-v2
+    version: "2.0"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medistore-ai
+      service: backend-v2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: medistore-ai
+        service: backend-v2
+    spec:
+      containers:
+        - name: backend-v2
+          image: medistoreacr.azurecr.io/medistore-backend:latest
+          command:
+            - uvicorn
+            - backend.api.v2_server:app
+            - --host
+            - "0.0.0.0"
+            - --port
+            - "8000"
+            - --workers
+            - "2"
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: medistore-config
+            - secretRef:
+                name: medistore-secrets
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: acr-secret

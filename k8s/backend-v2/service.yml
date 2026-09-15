@@ -1,0 +1,22 @@
+# ==============================================================================
+# MediStore AI — Backend v2 Service
+# File: k8s/backend-v2/service.yml
+# ==============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: medistore-backend-v2
+  namespace: medistore-prod
+  labels:
+    app: medistore-ai
+    service: backend-v2
+spec:
+  type: ClusterIP
+  selector:
+    app: medistore-ai
+    service: backend-v2
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP

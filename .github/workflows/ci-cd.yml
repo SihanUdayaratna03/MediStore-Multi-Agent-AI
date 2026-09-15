@@ -1,0 +1,382 @@
+# ==============================================================================
+# MediStore AI — Azure CI/CD Pipeline (GitHub Actions)
+# File: .github/workflows/ci-cd.yml
+#
+# Stage 1: Continuous Integration  (lint + test)
+# Stage 2: Build Docker Images → Push to Azure Container Registry (ACR)
+# Stage 3: Deploy to Staging       (develop branch only)
+# Stage 4: Deploy to Production    (main branch + manual approval gate)
+#
+# Required GitHub Secrets:
+#   AZURE_CREDENTIALS       → JSON output of: az ad sp create-for-rbac
+#   ACR_LOGIN_SERVER        → e.g. medistoreacr.azurecr.io
+#   ACR_USERNAME            → ACR admin username
+#   ACR_PASSWORD            → ACR admin password
+#   AKS_CLUSTER_NAME        → e.g. medistore-aks
+#   AKS_RESOURCE_GROUP      → e.g. medistore-rg
+#   AKS_STAGING_NAMESPACE   → e.g. medistore-staging
+#   AKS_PROD_NAMESPACE      → e.g. medistore-prod
+#   GEMINI_API_KEY          → Google Gemini API key
+#   GOOGLE_MAPS_API_KEY     → Google Maps API key
+# ==============================================================================
+
+name: MediStore AI — Azure CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "22"
+  ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+  IMAGE_BACKEND: ${{ secrets.ACR_LOGIN_SERVER }}/medistore-backend
+  IMAGE_RAG: ${{ secrets.ACR_LOGIN_SERVER }}/medistore-rag
+  IMAGE_FRONTEND: ${{ secrets.ACR_LOGIN_SERVER }}/medistore-frontend
+
+# ==============================================================================
+# STAGE 1: CONTINUOUS INTEGRATION (CI)
+# Runs on every push and pull request
+# ==============================================================================
+jobs:
+  # ----------------------------------------------------------------------------
+  # 1a. Backend CI — Python lint + import checks (v2, v3, RAG)
+  # ----------------------------------------------------------------------------
+  backend-ci:
+    name: "Stage 1 — Backend CI (Python)"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install backend dependencies (v2)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install backend dependencies (v3 — UCI-130)
+        run: |
+          pip install -r requirements_uci130.txt
+
+      - name: Install backend dependencies (RAG)
+        run: |
+          pip install -r requirements_rag.txt
+
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Treat all other issues as warnings (exit-zero)
+          flake8 backend/ --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+
+      - name: Verify backend v2 imports
+        run: |
+          python -c "from backend.api.v2_server import app; print('✅ backend-v2 imports OK')"
+        env:
+          PYTHONPATH: .
+
+      - name: Verify backend v3 imports
+        run: |
+          python -c "from backend.api.v3_server import app; print('✅ backend-v3 imports OK')"
+        env:
+          PYTHONPATH: .
+
+  # ----------------------------------------------------------------------------
+  # 1b. Frontend CI — Node install, lint, build
+  # ----------------------------------------------------------------------------
+  frontend-ci:
+    name: "Stage 1 — Frontend CI (React + Vite)"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Lint frontend (oxlint)
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Build frontend (Vite production build)
+        working-directory: frontend
+        run: npm run build
+        env:
+          VITE_BACKEND_V2_URL: http://localhost:8000
+          VITE_BACKEND_V3_URL: http://localhost:8001
+          VITE_RAG_URL: http://localhost:8002
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 1
+
+# ==============================================================================
+# STAGE 2: BUILD DOCKER IMAGES & PUSH TO AZURE ACR
+# Runs after CI passes, only on push to main or develop
+# ==============================================================================
+  docker-build-push:
+    name: "Stage 2 — Docker Build & Push to ACR"
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+    if: github.event_name == 'push'
+
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tag }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: meta
+        run: |
+          SHORT_SHA="${GITHUB_SHA::8}"
+          BRANCH="${GITHUB_REF_NAME}"
+          TAG="${BRANCH}-${SHORT_SHA}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "Image tag will be: ${TAG}"
+
+      - name: Log in to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ── Backend Image (shared between v2 and v3) ──────────────────────────
+      - name: Build & Push backend image (v2 + v3)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_BACKEND }}:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE_BACKEND }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ── RAG Backend Image ─────────────────────────────────────────────────
+      - name: Build & Push RAG backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_RAG }}:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE_RAG }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ── Frontend Image ────────────────────────────────────────────────────
+      - name: Build & Push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_FRONTEND }}:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE_FRONTEND }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+# ==============================================================================
+# STAGE 3: DEPLOY TO STAGING (develop branch only)
+# ==============================================================================
+  deploy-staging:
+    name: "Stage 3 — Deploy to Staging (AKS)"
+    runs-on: ubuntu-latest
+    needs: [docker-build-push]
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    environment:
+      name: staging
+      url: https://staging.medistore.ai
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+
+      - name: Create/update staging namespace
+        run: |
+          kubectl apply -f k8s/namespace.yml
+          kubectl apply -f k8s/configmap.yml
+
+      - name: Inject secrets into AKS staging namespace
+        run: |
+          kubectl create secret generic medistore-secrets \
+            --namespace=${{ secrets.AKS_STAGING_NAMESPACE }} \
+            --from-literal=GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
+            --from-literal=GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy backend-v2 to staging
+        run: |
+          kubectl set image deployment/medistore-backend-v2 \
+            backend-v2=${{ env.IMAGE_BACKEND }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+          kubectl apply -f k8s/backend-v2/ --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+
+      - name: Deploy backend-v3 to staging
+        run: |
+          kubectl set image deployment/medistore-backend-v3 \
+            backend-v3=${{ env.IMAGE_BACKEND }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+          kubectl apply -f k8s/backend-v3/ --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+
+      - name: Deploy backend-rag to staging
+        run: |
+          kubectl set image deployment/medistore-backend-rag \
+            backend-rag=${{ env.IMAGE_RAG }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+          kubectl apply -f k8s/backend-rag/ --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+
+      - name: Deploy frontend to staging
+        run: |
+          kubectl set image deployment/medistore-frontend \
+            frontend=${{ env.IMAGE_FRONTEND }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+          kubectl apply -f k8s/frontend/ --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+
+      - name: Apply ingress rules (staging)
+        run: |
+          kubectl apply -f k8s/ingress/ --namespace=${{ secrets.AKS_STAGING_NAMESPACE }}
+
+      - name: Verify staging rollout
+        run: |
+          kubectl rollout status deployment/medistore-backend-v2 --namespace=${{ secrets.AKS_STAGING_NAMESPACE }} --timeout=120s
+          kubectl rollout status deployment/medistore-backend-v3 --namespace=${{ secrets.AKS_STAGING_NAMESPACE }} --timeout=120s
+          kubectl rollout status deployment/medistore-backend-rag --namespace=${{ secrets.AKS_STAGING_NAMESPACE }} --timeout=120s
+          kubectl rollout status deployment/medistore-frontend --namespace=${{ secrets.AKS_STAGING_NAMESPACE }} --timeout=120s
+          echo "✅ Staging deployment complete"
+
+# ==============================================================================
+# STAGE 4: DEPLOY TO PRODUCTION (main branch + manual approval)
+# ==============================================================================
+  deploy-production:
+    name: "Stage 4 — Deploy to Production (AKS)"
+    runs-on: ubuntu-latest
+    needs: [docker-build-push]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://medistore.ai
+    # NOTE: Configure a required reviewer in GitHub → Settings → Environments
+    # → production → Required reviewers. This adds the manual approval gate.
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+
+      - name: Apply namespace & configmap
+        run: |
+          kubectl apply -f k8s/namespace.yml
+          kubectl apply -f k8s/configmap.yml
+
+      - name: Inject secrets into AKS production namespace
+        run: |
+          kubectl create secret generic medistore-secrets \
+            --namespace=${{ secrets.AKS_PROD_NAMESPACE }} \
+            --from-literal=GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} \
+            --from-literal=GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy backend-v2 to production
+        run: |
+          kubectl set image deployment/medistore-backend-v2 \
+            backend-v2=${{ env.IMAGE_BACKEND }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+          kubectl apply -f k8s/backend-v2/ --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+
+      - name: Deploy backend-v3 to production
+        run: |
+          kubectl set image deployment/medistore-backend-v3 \
+            backend-v3=${{ env.IMAGE_BACKEND }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+          kubectl apply -f k8s/backend-v3/ --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+
+      - name: Deploy backend-rag to production
+        run: |
+          kubectl set image deployment/medistore-backend-rag \
+            backend-rag=${{ env.IMAGE_RAG }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+          kubectl apply -f k8s/backend-rag/ --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+
+      - name: Deploy frontend to production
+        run: |
+          kubectl set image deployment/medistore-frontend \
+            frontend=${{ env.IMAGE_FRONTEND }}:${{ needs.docker-build-push.outputs.image_tag }} \
+            --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+          kubectl apply -f k8s/frontend/ --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+
+      - name: Apply ingress rules (production)
+        run: |
+          kubectl apply -f k8s/ingress/ --namespace=${{ secrets.AKS_PROD_NAMESPACE }}
+
+      - name: Verify production rollout
+        run: |
+          kubectl rollout status deployment/medistore-backend-v2 --namespace=${{ secrets.AKS_PROD_NAMESPACE }} --timeout=180s
+          kubectl rollout status deployment/medistore-backend-v3 --namespace=${{ secrets.AKS_PROD_NAMESPACE }} --timeout=180s
+          kubectl rollout status deployment/medistore-backend-rag --namespace=${{ secrets.AKS_PROD_NAMESPACE }} --timeout=180s
+          kubectl rollout status deployment/medistore-frontend --namespace=${{ secrets.AKS_PROD_NAMESPACE }} --timeout=180s
+          echo "🚀 Production deployment complete!"
+
+      - name: Post deployment summary
+        run: |
+          echo "## 🚀 MediStore AI — Production Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Service        | Image Tag |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------------|-----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| backend-v2     | ${{ needs.docker-build-push.outputs.image_tag }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| backend-v3     | ${{ needs.docker-build-push.outputs.image_tag }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| backend-rag    | ${{ needs.docker-build-push.outputs.image_tag }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| frontend       | ${{ needs.docker-build-push.outputs.image_tag }} |" >> $GITHUB_STEP_SUMMARY
