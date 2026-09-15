@@ -34,7 +34,7 @@ on:
 
 env:
   PYTHON_VERSION: "3.12"
-  NODE_VERSION: "20"
+  NODE_VERSION: "22"
   ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
   IMAGE_BACKEND: ${{ secrets.ACR_LOGIN_SERVER }}/medistore-backend
   IMAGE_RAG: ${{ secrets.ACR_LOGIN_SERVER }}/medistore-rag
